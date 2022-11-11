@@ -6,7 +6,7 @@ package Servlets;
 
 /**
  *
- * @author marco
+ * @author UAHlockers
  */
 public class Servlet {
     

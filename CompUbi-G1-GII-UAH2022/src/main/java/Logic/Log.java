@@ -4,7 +4,7 @@ package Logic;
 
 /**
  *
- * @author marco
+ * @author UAHlockers
  */
 public class Log {
     public static Logger Log;

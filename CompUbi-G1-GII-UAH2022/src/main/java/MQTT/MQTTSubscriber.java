@@ -7,7 +7,7 @@ package MQTT;
 import java.sql.Connection;
 /**
  *
- * @author marco
+ * @author UAHlockers
  */
 public class MQTTSubscriber {
     public void SearchTopicsToSubscribe(MQTTBroker broker){

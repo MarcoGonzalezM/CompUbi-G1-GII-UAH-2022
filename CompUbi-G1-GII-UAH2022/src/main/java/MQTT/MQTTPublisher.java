@@ -8,7 +8,7 @@ package MQTT;
 
 /**
  *
- * @author marco
+ * @author UAHlockers
  */
 public class MQTTPublisher {
   

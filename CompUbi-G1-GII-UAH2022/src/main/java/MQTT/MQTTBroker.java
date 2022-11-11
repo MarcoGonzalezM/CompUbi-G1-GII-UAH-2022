@@ -6,7 +6,7 @@ package MQTT;
 
 /**
  *
- * @author marco
+ * @author UAHlockers
  */
 public class MQTTBroker {
     private static int qos = 2; // Calidad del servicio, a menor número menor calidad
