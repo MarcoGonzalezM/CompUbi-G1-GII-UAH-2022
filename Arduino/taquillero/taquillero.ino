@@ -1,5 +1,5 @@
 #include "SR04.h"
-#include <Servo.h>
+#include <ESP32Servo.h>
 
 //PINES
 //Sensor Ultrasonido
