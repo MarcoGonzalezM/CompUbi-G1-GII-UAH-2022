@@ -7,6 +7,7 @@
 #include <ESP32Servo.h>
 #include <SR04.h>
 
+//CONSTANTES
 //wifi
 const char* ssid = "OnePlus 9R";
 const char* password = "c65e6rv6";
@@ -15,9 +16,7 @@ const char* password = "c65e6rv6";
 const char* mqtt_server = "192.168.154.15";
 const int mqtt_port = 1883;
 
-WiFiClient espClient;
-PubSubClient client(espClient);
-
+//PINES
 //leds
 const int led1 = 13;
 const int led2 = 35;
@@ -26,16 +25,11 @@ const int led2 = 35;
 const byte ROWS = 4;
 const byte COLS = 4;
 
-//Servomotor
-Servo servo1;
-
-
 //Sensor Ultrasonido
-int usTrig1 = 27;
-int usEcho1 = 14;
-SR04 sr04 = SR04(usEcho1,usTrig1);
-long distancia;
+const int usTrig1 = 27;
+const int usEcho1 = 14;
 
+//Pad Numerico
 char hexaKeys[ROWS][COLS] = {
   {'1','2','3','A'},
   {'4','5','6','B'},
@@ -45,14 +39,30 @@ char hexaKeys[ROWS][COLS] = {
 
 byte rowPins[ROWS] = {15, 2, 0, 4};
 byte colPins[COLS] = {16, 17, 5, 18};
+
+
+//VARIABLES GLOBALES
+//Servomotor
+Servo servo1;
+
+//Sensor Ultrasonido
+SR04 sr04 = SR04(usEcho1,usTrig1);
+long distancia;
+
+//Wifi
+WiFiClient espClient;
+
+//Cliente MQTT
+PubSubClient client(espClient);
+
+//Pad Numerico
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
 //LCD
 LiquidCrystal_I2C lcd(0x27,16,2);
 
-//Variables globales
+//Clave a introducir
 String clave = "";
-char customKey;
 
 void setup()
 {
@@ -144,55 +154,64 @@ void resetDisplay()
 
 void loop()
 {
+  //Intenta conectar al servidor mqtt
   if(!client.connected())
   {
     reconnect();
   }
   client.loop();
 
-  customKey = customKeypad.getKey();
-  if(clave.length() < 16)
+  //obtiene el caracter del keypad  
+  char customKey = customKeypad.getKey();
+  if(clave.length() < 16) //Si la clave es menor que la longitud del display
   {
-    if((customKey == '*') && (clave.length() != 0))
+    if((customKey == '*') && (clave.length() != 0)) //Si el caracter es * y la longitud de la clave es vacia
     {
-      clave = clave.substring(0, clave.length()-1);
-      resetDisplay();
+      clave = clave.substring(0, clave.length()-1); //Elimina el ultimo caracter
+      resetDisplay();                               //Resetea el display
     }
-    else if(customKey == '#')
+    else if(customKey == '#')                       //Si el caracter es #
     {
+      //La clave la convertimos en un char array
       int longitudClave = clave.length() + 1;
       char arrayClave[longitudClave];
-      clave.toCharArray(arrayClave, longitudClave);
-            
+      clave.toCharArray(arrayClave, longitudClave); 
+      
+      //Se publica la clave en el broker con el topic
       client.publish("test/clave", arrayClave);
       
+      //Se resetea la clave y el display
       clave = "";
       resetDisplay();
 
     }
-    else if(customKey)
+    else if(customKey) // Si se lee un caracter en el pad numerico
     {
-      clave = clave + customKey;
+      clave = clave + customKey;  //annadimos el caracter a la clave
     }
   }
   else
   {
-    clave = "";
+    //Si se pasa de la longitud, reseteamos el display y la clave
+    clave = ""; 
     resetDisplay();
   }
 
+  //Imprimimos la clave por el display
   lcd.setCursor(0,1);
   lcd.print(clave);
 
-
+  //Recogemos la distancia del sensor ultrasonido
   distancia=sr04.Distance();
-  if(distancia < 20)
+  if(distancia < 20)  // Si se encuentra el paquete en la taquilla
   {
+    //publicamos en el broker que se encuentra y lo indicamos con el led
     client.publish("test/sensor", "Esta");
     digitalWrite(led2, HIGH);
   }
   else
   {
+    //Si no lo publicamos que no se encuentra el paquete y lo indicamos con el led
     client.publish("test/sensor", "No esta");
     digitalWrite(led2, LOW);
   }
