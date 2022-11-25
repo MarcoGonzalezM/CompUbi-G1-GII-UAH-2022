@@ -7,6 +7,8 @@
 #include <ESP32Servo.h>
 #include <SR04.h>
 
+#include "Taquilla.h"
+
 //CONSTANTES
 //wifi
 const char* ssid = "OnePlus 9R";
@@ -18,8 +20,11 @@ const int mqtt_port = 1883;
 
 //PINES
 //leds
-const int led1 = 13;
-const int led2 = 35;
+const int ledRojo1 = 13;
+const int ledVerde1 = 12;
+const int ledAzul1 = 14;
+
+const int ledPaquete1 = 35;
 
 //PADNUMERICO
 const byte ROWS = 4;
@@ -43,7 +48,7 @@ byte colPins[COLS] = {16, 17, 5, 18};
 
 //VARIABLES GLOBALES
 //Servomotor
-Servo servo1;
+const int pinServo1 = 12;
 
 //Sensor Ultrasonido
 SR04 sr04 = SR04(usEcho1,usTrig1);
@@ -64,6 +69,8 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 //Clave a introducir
 String clave = "";
 
+Taquilla taquillas[];
+
 void setup()
 {
   Serial.begin(115200);
@@ -73,15 +80,13 @@ void setup()
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
-
-  servo1.attach(12);
-  servo1.write(0);
-
   lcd.init();
   lcd.backlight();
   lcd.print("Escriba en PAD:");
+
+  Taquilla taquilla1 = Taquilla(ledRojo1, ledVerde1, ledAzul1, pinServo1, usTrig1, usEcho1, ledPaquete1, client, 1);
+
+  taquillas = {taquilla1};
 }
 
 void setup_wifi()
@@ -99,45 +104,39 @@ void setup_wifi()
 
 void callback(char* topic, byte* message, unsigned int length)
 {
-  Serial.print("Mensaje recibido en el topic: ");
-  Serial.print(topic);
-  Serial.print(". mensaje: ");
-
   String msgTemp;
 
   for(int i = 0; i<length; i++)
   {
     msgTemp += (char)message[i];
   }
-  Serial.print(msgTemp);
-  Serial.println();
 
-  if(String(topic) == "test/hola")
+
+  for(int i = 0; i < sizeof(taquillas); i++)
   {
-    if(msgTemp == "Abrir")
+    String idStr = (String) i;
+    if(String(topic) == "Taquillero1/Taquilla" + idStr + "/abrir")
     {
-      Serial.println("Abierto");
-      digitalWrite(led1, HIGH);
-      servo1.write(0);
-      client.publish("test/estoy", "Abierto");
-    }
-    else if(msgTemp == "Cerrar")
-    {
-      Serial.println("Cerrado");
-      digitalWrite(led1, LOW);
-      servo1.write(90);
-      client.publish("test/estoy", "Cerrado");
+      if(msgTemp == "Abrir")
+      {
+        taquillas[i].abrir();
+      }
+      else if(msgTemp == "Cerrar")
+      {
+        taquillas[i].cerrar();
+      }
     }
   }
+  
 }
 
 void reconnect()
 {
   while(!client.connected())
   {
-    if(client.connect("ESP32Client"))
+    if(client.connect("Taquillero1"))
     {
-      client.subscribe("test/hola");
+      client.subscribe("Taquillero1");
     }
     else
     {
@@ -178,7 +177,7 @@ void loop()
       clave.toCharArray(arrayClave, longitudClave); 
       
       //Se publica la clave en el broker con el topic
-      client.publish("test/clave", arrayClave);
+      client.publish("Taquillero1/clave", arrayClave);
       
       //Se resetea la clave y el display
       clave = "";
@@ -202,18 +201,9 @@ void loop()
   lcd.print(clave);
 
   //Recogemos la distancia del sensor ultrasonido
-  distancia=sr04.Distance();
-  if(distancia < 20)  // Si se encuentra el paquete en la taquilla
+  for(int i = 0; i < sizeof(taquillas); i++)
   {
-    //publicamos en el broker que se encuentra y lo indicamos con el led
-    client.publish("test/sensor", "Esta");
-    digitalWrite(led2, HIGH);
-  }
-  else
-  {
-    //Si no lo publicamos que no se encuentra el paquete y lo indicamos con el led
-    client.publish("test/sensor", "No esta");
-    digitalWrite(led2, LOW);
+    taquillas[i].estaPaquete();
   }
 
   delay(100);
