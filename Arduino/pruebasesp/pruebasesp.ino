@@ -11,11 +11,11 @@
 
 //CONSTANTES
 //wifi
-const char* ssid = "OnePlus 9R";
-const char* password = "c65e6rv6";
+const char* ssid = "MIWIFI_2G_REfs";
+const char* password = "PpejR6Ku";
 
 //MQTT servidor
-const char* mqtt_server = "192.168.154.15";
+const char* mqtt_server = "192.168.1.141";
 const int mqtt_port = 1883;
 
 //PINES
