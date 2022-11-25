@@ -1,10 +1,10 @@
 #include "Taquilla.h"
-#include <ESP32Servo.h>
-#include <SR04.h>
-#include <PubSubClient.h>
 
 Taquilla::Taquilla(int ledRojo, int ledVerde, int ledAzul, int servo, int sensorTrig, int sensorEcho, int ledPaquete, PubSubClient client, int id)
 {
+    SR04 temp = SR04(sensorEcho, sensorTrig);
+    this->sensor = temp;
+
     //ID
     this->id = id;
 
@@ -16,9 +16,6 @@ Taquilla::Taquilla(int ledRojo, int ledVerde, int ledAzul, int servo, int sensor
     digitalWrite(ledVerde, HIGH);
     digitalWrite(ledAzul, LOW);
 
-    //Sensor de ultrasonido
-    this->sensor = SR04(sensorEcho,sensorTrig);
-
     //Servomotor
     this->servo.attach(servo);
     this->servo.write(0);
@@ -29,7 +26,7 @@ Taquilla::Taquilla(int ledRojo, int ledVerde, int ledAzul, int servo, int sensor
 
     //Cliente MQTT
     this->client = client;
-};
+}
 
 void Taquilla::abrir()
 {
@@ -39,9 +36,13 @@ void Taquilla::abrir()
     digitalWrite(this->ledVerde, HIGH);
     digitalWrite(this->ledAzul, LOW);
 
-    client.publish("Taquilla" + (String) id + "/estado", "Abierto");
+    String topic = "Taquillero/Taquilla" + String(id) + "/estado";
+    char buff[topic.length()];
+    topic.toCharArray(buff, topic.length());
+
+    client.publish(buff, "Abierto");
     
-};
+}
 
 void Taquilla::cerrar()
 {
@@ -51,30 +52,37 @@ void Taquilla::cerrar()
     digitalWrite(this->ledVerde, LOW);
     digitalWrite(this->ledAzul, LOW);
 
-    client.publish("Taquilla" + (String) id + "/estado", "Cerrado");
-};
+    String topic = "Taquillero/Taquilla" + String(id) + "/estado";
+    char buff[topic.length()];
+    topic.toCharArray(buff, topic.length());
+
+    client.publish(buff, "Cerrado");
+}
+
+void Taquilla::estaPaquete()
+{
+    int distancia = this->sensor.Distance();
+
+    String topic = "Taquillero/Taquilla" + String(id) + "/paquete";
+    char buff[topic.length()];
+    topic.toCharArray(buff, topic.length());
+
+    if(distancia < 20)
+    {
+        digitalWrite(this->ledPaquete, HIGH);
+        
+        client.publish(buff, "Si");
+    }
+    else
+    {
+        digitalWrite(this->ledPaquete, LOW);
+        client.publish(buff, "No");
+    }
+}
 
 void Taquilla::autenticar()
 {
     digitalWrite(this->ledRojo, LOW);
     digitalWrite(this->ledVerde, LOW);
     digitalWrite(this->ledAzul, HIGH);
-};
-
-void Taquilla::estaPaquete()
-{
-    int distancia = this->sensor.Distance();
-    String idStr = (String) this->id;
-
-    if(distancia < 20)
-    {
-        digitalWrite(this->ledPaquete, HIGH);
-        
-        client.publish("Taquilla" + idStr + "/paquete", "Si");
-    }
-    else
-    {
-        digitalWrite(this->ledPaquete, LOW);
-        client.publish("Taquilla" + idStr + "/paquete", "No");
-    }
-};
+}

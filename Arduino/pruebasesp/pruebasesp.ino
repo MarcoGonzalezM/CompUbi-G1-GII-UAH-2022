@@ -69,7 +69,10 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 //Clave a introducir
 String clave = "";
 
-Taquilla taquillas[];
+Taquilla taquillas[] =
+  {
+    Taquilla(ledRojo1, ledVerde1, ledAzul1, pinServo1, usTrig1, usEcho1, ledPaquete1, client, 0)
+  };
 
 void setup()
 {
@@ -83,10 +86,6 @@ void setup()
   lcd.init();
   lcd.backlight();
   lcd.print("Escriba en PAD:");
-
-  Taquilla taquilla1 = Taquilla(ledRojo1, ledVerde1, ledAzul1, pinServo1, usTrig1, usEcho1, ledPaquete1, client, 1);
-
-  taquillas = {taquilla1};
 }
 
 void setup_wifi()
