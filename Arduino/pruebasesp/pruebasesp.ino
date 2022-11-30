@@ -1,12 +1,12 @@
 #include <WiFi.h>
 #include <SPIFFS.h>
 #include <PubSubClient.h>
-#include <Wire.h> 
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <Keypad.h>
 #include <ESP32Servo.h>
 #include <SR04.h>
-
+#include <Keypad_I2C.h>
+#include <Keypad.h>
 #include "Taquilla.h"
 
 //CONSTANTES
@@ -18,23 +18,10 @@ const char* password = "PpejR6Ku";
 const char* mqtt_server = "192.168.1.141";
 const int mqtt_port = 1883;
 
-//PINES
-//leds
-const int ledRojo1 = 13;
-const int ledVerde1 = 12;
-const int ledAzul1 = 14;
-
-const int ledPaquete1 = 35;
-
 //PADNUMERICO
 const byte ROWS = 4;
 const byte COLS = 4;
 
-//Sensor Ultrasonido
-const int usTrig1 = 27;
-const int usEcho1 = 14;
-
-//Pad Numerico
 char hexaKeys[ROWS][COLS] = {
   {'1','2','3','A'},
   {'4','5','6','B'},
@@ -42,17 +29,13 @@ char hexaKeys[ROWS][COLS] = {
   {'*','0','#','D'}
 };
 
-byte rowPins[ROWS] = {15, 2, 0, 4};
-byte colPins[COLS] = {16, 17, 5, 18};
+byte rowPins[ROWS] = {0, 1, 2, 3};
+byte colPins[COLS] = {4, 5, 6, 7};
 
+Keypad_I2C customKeypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS, 0x20);
 
-//VARIABLES GLOBALES
-//Servomotor
-const int pinServo1 = 12;
-
-//Sensor Ultrasonido
-SR04 sr04 = SR04(usEcho1,usTrig1);
-long distancia;
+//LCD
+LiquidCrystal_I2C lcd(0x27,16,2);
 
 //Wifi
 WiFiClient espClient;
@@ -60,19 +43,40 @@ WiFiClient espClient;
 //Cliente MQTT
 PubSubClient client(espClient);
 
-//Pad Numerico
-Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+//TAQUILLERO1
+//leds
+const int ledRojo1 = 5;
+const int ledVerde1 = 18;
+const int ledPaquete1 = 17;
 
-//LCD
-LiquidCrystal_I2C lcd(0x27,16,2);
+//Servomotor
+const int pinServo1 = 12;
+
+//Sensor Ultrasonido
+const int usTrig1 = 33;
+const int usEcho1 = 32;
+
+//NUMERO DE TAQUILLAS
+const int numTaquillas = 1;
+
+//IDENTIFICADOR TAQUILLERO
+const int idTaquillero = 1;
+String nombreTaquillero = "Taquillero" + String(idTaquillero);
+
+//Sensores Ultrasonido
+SR04 sensores[] =
+{
+  SR04(usEcho1, usTrig1)
+};
+
+//Taquillas
+Taquilla taquillas[] = 
+{
+  Taquilla(ledRojo1, ledVerde1, pinServo1, ledPaquete1, 0)
+};
 
 //Clave a introducir
 String clave = "";
-
-Taquilla taquillas[] =
-  {
-    Taquilla(ledRojo1, ledVerde1, ledAzul1, pinServo1, usTrig1, usEcho1, ledPaquete1, client, 0)
-  };
 
 void setup()
 {
@@ -83,9 +87,17 @@ void setup()
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 
+  pinMode(ledRojo1, OUTPUT);
+  pinMode(ledVerde1, OUTPUT);
+  pinMode(ledPaquete1, OUTPUT);
+
   lcd.init();
   lcd.backlight();
   lcd.print("Escriba en PAD:");
+
+  Serial.println("Conectado");
+
+  customKeypad.begin();
 }
 
 void setup_wifi()
@@ -109,33 +121,53 @@ void callback(char* topic, byte* message, unsigned int length)
   {
     msgTemp += (char)message[i];
   }
+  Serial.println(msgTemp);
+  Serial.println(topic);
 
-
-  for(int i = 0; i < sizeof(taquillas); i++)
+  String strTopic = String(topic);
+  
+  for(int i = 0; i < numTaquillas; i++)
   {
-    String idStr = (String) i;
-    if(String(topic) == "Taquillero1/Taquilla" + idStr + "/abrir")
+    if(strTopic == nombreTaquillero + "/Taquilla" + taquillas[i].getId() + "/abrir")
     {
+      String topic = nombreTaquillero + "/Taquilla" + taquillas[i].getId() +  + "/estado";
+      char buff[topic.length()+1];
+      topic.toCharArray(buff, topic.length()+1);
+
       if(msgTemp == "Abrir")
       {
         taquillas[i].abrir();
+        client.publish(buff, "Abierto");
       }
-      else if(msgTemp == "Cerrar")
+      if(msgTemp == "Cerrar")
       {
         taquillas[i].cerrar();
+        client.publish(buff, "Cerrado");
       }
-    }
+      if(msgTemp == "Autenticar")
+      {
+        taquillas[i].autenticar();
+        client.publish(buff, "Cerrado");
+      }
+    } 
   }
-  
+
 }
 
 void reconnect()
 {
+  char buff[nombreTaquillero.length()+1];
+  nombreTaquillero.toCharArray(buff, nombreTaquillero.length()+1);
+
   while(!client.connected())
   {
-    if(client.connect("Taquillero1"))
+    if(client.connect(buff))
     {
-      client.subscribe("Taquillero1");
+      String topic = nombreTaquillero + "/#";
+      char buff2[topic.length()+1];
+      topic.toCharArray(buff2, topic.length()+1);
+
+      client.subscribe(buff2);
     }
     else
     {
@@ -175,8 +207,12 @@ void loop()
       char arrayClave[longitudClave];
       clave.toCharArray(arrayClave, longitudClave); 
       
+      String topicClave = nombreTaquillero + "/clave";
+      char buffClave[topicClave.length()+1];
+      topicClave.toCharArray(buffClave, topicClave.length()+1);
+
       //Se publica la clave en el broker con el topic
-      client.publish("Taquillero1/clave", arrayClave);
+      client.publish(buffClave, arrayClave);
       
       //Se resetea la clave y el display
       clave = "";
@@ -199,12 +235,22 @@ void loop()
   lcd.setCursor(0,1);
   lcd.print(clave);
 
-  //Recogemos la distancia del sensor ultrasonido
-  for(int i = 0; i < sizeof(taquillas); i++)
+  for(int i = 0; i < numTaquillas; i++)
   {
-    taquillas[i].estaPaquete();
+    String topic = nombreTaquillero + "/Taquilla" + taquillas[i].getId() +  + "/paquete";
+    char buff[topic.length()+1];
+    topic.toCharArray(buff, topic.length()+1);
+
+    if (taquillas[i].estaPaquete(sensores[i]))
+    {
+      client.publish(buff, "Si");
+    }
+    else
+    {
+      client.publish(buff, "No");
+    }
   }
 
-  delay(100);
+  delay(200);
 
 }

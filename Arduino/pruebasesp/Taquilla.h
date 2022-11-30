@@ -9,20 +9,18 @@ class Taquilla
 
     int ledRojo;
     int ledVerde;
-    int ledAzul;
 
     int ledPaquete;
-    Servo servo ;
-    SR04 sensor = SR04(1, 2);
-
-    PubSubClient client;
+    Servo servo;
 
   public:
-    Taquilla(int ledRojo, int ledVerde, int ledAzul, int servo, int sensorTrig, int sensorEcho, int ledPaquete, PubSubClient client, int id);
+    Taquilla(int ledRojo, int ledVerde, int servo, int ledPaquete, int id);
 
     void abrir();
     void cerrar();
-    void estaPaquete();
+    bool estaPaquete(SR04 sensor);
     void autenticar();
+
+    String getId();
 
 };
