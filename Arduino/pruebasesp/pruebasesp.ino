@@ -11,11 +11,11 @@
 
 //CONSTANTES
 //wifi
-const char* ssid = "MIWIFI_2G_REfs";
-const char* password = "PpejR6Ku";
+const char* ssid = "OnePlus 9R";
+const char* password = "c65e6rv6";
 
 //MQTT servidor
-const char* mqtt_server = "192.168.1.141";
+const char* mqtt_server = "192.168.54.15";
 const int mqtt_port = 1883;
 
 //PADNUMERICO
@@ -237,7 +237,7 @@ void loop()
 
   for(int i = 0; i < numTaquillas; i++)
   {
-    String topic = nombreTaquillero + "/Taquilla" + taquillas[i].getId() +  + "/paquete";
+    String topic = nombreTaquillero + "/Taquilla" + taquillas[i].getId() +  + "/hay_paquete";
     char buff[topic.length()+1];
     topic.toCharArray(buff, topic.length()+1);
 
