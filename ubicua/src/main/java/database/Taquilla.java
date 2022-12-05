@@ -11,6 +11,12 @@ public class Taquilla {
         this.id_taquillero = id_taquillero;
         this.ocupado = ocupado;
     }
+    
+    public Taquilla() {
+        this.id_taquilla = 0;
+        this.id_taquillero = 0;
+        this.ocupado = false;
+    }
 
     public int getId_taquilla() {
         return id_taquilla;
@@ -35,6 +41,5 @@ public class Taquilla {
     public void setOcupado(boolean ocupado) {
         this.ocupado = ocupado;
     }
-    
     
 }

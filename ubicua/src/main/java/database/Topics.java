@@ -27,8 +27,8 @@ public class Topics
     public Topics(String idTopic, String idTaquillero, String idTaquilla, String clave, String abrir, String estado, String hay_paquete, String value) {
         this.idTopic = idTopic;
         this.idTaquillero = idTaquillero;
-        this.idTaquilla = idTaquilla;
         this.clave = clave;
+        this.idTaquilla = idTaquilla;
         this.abrir = abrir;
         this.estado = estado;
         this.hay_paquete = hay_paquete;

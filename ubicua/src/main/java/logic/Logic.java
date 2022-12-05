@@ -78,7 +78,7 @@ public class Logic
 	 */
 	public static ArrayList<Taquilla> getTaquillasFromTaquillero(int id_taquillero)
 	{
-		ArrayList<Taquillero> taquillas = new ArrayList<Taquillero>();
+		ArrayList<Taquilla> taquillas = new ArrayList<Taquilla>();
 		
 		ConectionDDBB conector = new ConectionDDBB();
 		Connection con = null;
@@ -93,30 +93,29 @@ public class Logic
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
-				Station station = new Station();
-				station.setId(rs.getInt("ID"));
-				station.setName(rs.getString("NAME"));
-				station.setLatitude(rs.getDouble("LATITUDE"));
-				station.setLongitude(rs.getDouble("LONGITUDE"));
-				stations.add(station);
+				Taquilla taquilla = new Taquilla();
+				taquilla.setId_taquilla(rs.getInt("ID_TAQUILLA"));
+				taquilla.setId_taquillero(rs.getInt("ID_TAQUILLERO"));
+				taquilla.setOcupado(rs.getBoolean("OCUPADO"));
+				taquillas.add(taquilla);
 			}	
 		} catch (SQLException e)
 		{
 			Log.log.error("Error: {}", e);
-			stations = new ArrayList<Station>();
+			taquillas = new ArrayList<Taquilla>();
 		} catch (NullPointerException e)
 		{
 			Log.log.error("Error: {}", e);
-			stations = new ArrayList<Station>();
+			taquillas = new ArrayList<Taquilla>();
 		} catch (Exception e)
 		{
 			Log.log.error("Error:{}", e);
-			stations = new ArrayList<Station>();
+			taquillas = new ArrayList<Taquilla>();
 		} finally
 		{
 			conector.closeConnection(con);
 		}
-		return stations;
+		return taquillas;
 	}
 	
 	/**
