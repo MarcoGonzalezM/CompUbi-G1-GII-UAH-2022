@@ -9,13 +9,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PedirPaquete extends AppCompatActivity {
 
+    int idCliente;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedir_paquete);
-
+        
         Button button1 = (Button) findViewById(R.id.button_paq_prueba);
         Button button2 = (Button) findViewById(R.id.button_volver);
+
+        idCliente = getIntent().getIntExtra("idCliente",0);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,6 +32,7 @@ public class PedirPaquete extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PedirPaquete.this, MenuPrincipalCliente.class);
+                i.putExtra("idCliente", idCliente);
                 startActivity(i);
                 finish();
             }

@@ -10,6 +10,8 @@ import android.widget.Button;
 
 public class MenuPrincipalCliente extends AppCompatActivity {
 
+    int idCliente;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,11 +22,14 @@ public class MenuPrincipalCliente extends AppCompatActivity {
         Button button3 = (Button) findViewById(R.id.button_mis_not);
         Button button4 = (Button) findViewById(R.id.button_cerr_ses);
 
+        idCliente = getIntent().getIntExtra("idCliente",0);
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MenuPrincipalCliente.this, PedirPaquete.class);
                 startActivity(i);
+                i.putExtra("idCliente", idCliente);
                 finish();
             }
         });
@@ -34,6 +39,7 @@ public class MenuPrincipalCliente extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MenuPrincipalCliente.this, MisPaquetes.class);
                 startActivity(i);
+                i.putExtra("idCliente", idCliente);
                 finish();
             }
         });
@@ -43,6 +49,7 @@ public class MenuPrincipalCliente extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MenuPrincipalCliente.this, MisNotificaciones.class);
                 startActivity(i);
+                i.putExtra("idCliente", idCliente);
                 finish();
             }
         });
@@ -52,6 +59,7 @@ public class MenuPrincipalCliente extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MenuPrincipalCliente.this, IniciarSesionCliente.class);
                 startActivity(i);
+                i.putExtra("idCliente", idCliente);
                 finish();
             }
         });

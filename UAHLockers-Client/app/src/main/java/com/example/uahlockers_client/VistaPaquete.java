@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class VistaPaquete extends AppCompatActivity {
 
+    int idCliente, idProducto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,10 +19,17 @@ public class VistaPaquete extends AppCompatActivity {
         Button button1 = (Button) findViewById(R.id.buttonAuth);
         Button button2 = (Button) findViewById(R.id.buttonBack);
 
+        idCliente = getIntent().getIntExtra("idCliente",0);
+        idProducto = getIntent().getIntExtra("idProducto",0);
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: Código del botón
+                int idNotificacion = 0;
                 Intent i = new Intent(VistaPaquete.this, Autentificacion.class);
+                i.putExtra("idCliente", idCliente);
+                i.putExtra("idNotificacion", idNotificacion);
                 startActivity(i);
                 finish();
             }
@@ -30,6 +39,7 @@ public class VistaPaquete extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(VistaPaquete.this, MisPaquetes.class);
+                i.putExtra("idCliente", idCliente);
                 startActivity(i);
                 finish();
             }
