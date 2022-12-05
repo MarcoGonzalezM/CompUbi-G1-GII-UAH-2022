@@ -11,11 +11,11 @@
 
 //CONSTANTES
 //wifi
-const char* ssid = "OnePlus 9R";
-const char* password = "c65e6rv6";
+const char* ssid = "UAHLockers";
+const char* password = "estoesesparta";
 
 //MQTT servidor
-const char* mqtt_server = "192.168.54.15";
+const char* mqtt_server = "192.168.0.166";
 const int mqtt_port = 1883;
 
 //PADNUMERICO
@@ -149,6 +149,22 @@ void callback(char* topic, byte* message, unsigned int length)
         taquillas[i].autenticar();
         client.publish(buff, "Cerrado");
       }
+      if(msgTemp == "Estapaquete")
+      {
+        String topicpaquete = nombreTaquillero + "/Taquilla" + taquillas[i].getId() +  + "/hay_paquete";
+        char buffp[topicpaquete.length()+1];
+        topicpaquete.toCharArray(buffp, topicpaquete.length()+1);
+
+        if(taquillas[i].getEstado())
+        {
+          
+          client.publish(buffp, "Si");
+        }
+        else
+        {
+          client.publish(buffp, "No");
+        }
+      }
     } 
   }
 
@@ -237,18 +253,7 @@ void loop()
 
   for(int i = 0; i < numTaquillas; i++)
   {
-    String topic = nombreTaquillero + "/Taquilla" + taquillas[i].getId() +  + "/hay_paquete";
-    char buff[topic.length()+1];
-    topic.toCharArray(buff, topic.length()+1);
-
-    if (taquillas[i].estaPaquete(sensores[i]))
-    {
-      client.publish(buff, "Si");
-    }
-    else
-    {
-      client.publish(buff, "No");
-    }
+    taquillas[i].estaPaquete(sensores[i]);
   }
 
   delay(200);

@@ -18,6 +18,8 @@ Taquilla::Taquilla(int ledRojo, int ledVerde, int servo, int ledPaquete, int id)
   //LED paquete
   this->ledPaquete = ledPaquete;
   digitalWrite(ledPaquete, LOW);
+
+  this->estado = false;
 }
 
 void Taquilla::abrir()
@@ -36,24 +38,22 @@ void Taquilla::cerrar()
   digitalWrite(this->ledVerde, LOW);
 }
 
-bool Taquilla::estaPaquete(SR04 sensor)
+void Taquilla::estaPaquete(SR04 sensor)
 {
   int distancia = sensor.Distance();
-  bool estar = true;
 
   if(distancia < 9)
   {
     digitalWrite(this->ledPaquete, HIGH);
+    this->estado = true;
     Serial.println("Si paquete");
   }
   else
   {
     digitalWrite(this->ledPaquete, LOW);
-    estar = false;
+    this->estado = false;
     Serial.println("No paquete");
   }
-
-  return estar;
 }
 
 void Taquilla::autenticar()
@@ -65,4 +65,9 @@ void Taquilla::autenticar()
 String Taquilla::getId()
 {
   return String(this->id);
+}
+
+bool Taquilla::getEstado()
+{
+  return this->estado;
 }

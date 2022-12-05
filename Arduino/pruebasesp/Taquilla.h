@@ -12,15 +12,17 @@ class Taquilla
 
     int ledPaquete;
     Servo servo;
+    bool estado;
 
   public:
     Taquilla(int ledRojo, int ledVerde, int servo, int ledPaquete, int id);
 
     void abrir();
     void cerrar();
-    bool estaPaquete(SR04 sensor);
+    void estaPaquete(SR04 sensor);
     void autenticar();
 
     String getId();
+    bool getEstado();
 
 };
