@@ -49,5 +49,45 @@ public class Logic {
         }
         return nuevoCliente;
     }
+    
+    
+    public static ArrayList<Taquilla> getTaquillasFromTaquilleroDB()
+	{
+		ArrayList<Taquilla> taquillas = new ArrayList<Taquilla>();
+		
+		ConectionDDBB conector = new ConectionDDBB();
+		Connection con = null;
+		try
+		{
+			con = conector.obtainConnection(true);
+			Log.log.debug("Database Connected");
+			
+			PreparedStatement ps = ConectionDDBB.GetTaquillasFromTaquillero(con);
+			Log.log.info("Query=> {}", ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{
+				Taquilla taquilla = new Taquilla();
+				taquilla.setId_taquillero(rs.getInt("id_taquilla"));
+				taquillas.add(taquilla);
+			}	
+		} catch (SQLException e)
+		{
+			Log.log.error("Error: {}", e);
+			taquillas = new ArrayList<Taquilla>();
+		} catch (NullPointerException e)
+		{
+			Log.log.error("Error: {}", e);
+			taquillas = new ArrayList<Taquilla>();
+		} catch (Exception e)
+		{
+			Log.log.error("Error:{}", e);
+			taquillas = new ArrayList<Taquilla>();
+		} finally
+		{
+			conector.closeConnection(con);
+		}
+		return taquillas;
+	}
 
 }
