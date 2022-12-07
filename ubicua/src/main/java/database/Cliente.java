@@ -1,25 +1,33 @@
 package database;
 
 public class Cliente {
-    
-    private String correo_cliente;
+
+    private String nombre;
     private String password;
+    private int id_cliente;
 
     public Cliente() {
-        this.correo_cliente = null;
+        this.nombre = null;
         this.password = null;
-    }
-    
-    
-
-    public String getCorreo_cliente() {
-        return correo_cliente;
+        this.id_cliente = 0;
     }
 
-    public void setCorreo_cliente(String correo_cliente) {
-        this.correo_cliente = correo_cliente;
+    public String getNombre() {
+        return nombre;
     }
-    
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -28,6 +36,4 @@ public class Cliente {
         this.password = password;
     }
 
-      
-    
 }

@@ -12,6 +12,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
+import database.Cliente;
+import logic.Log;
+import logic.Logic;
+
 /**
  *
  * @author Heras
@@ -31,21 +37,22 @@ public class ServletPrueba extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServletPrueba</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ServletPrueba at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        PrintWriter out = response.getWriter();
+        try {
+            int id_cliente = Integer.parseInt(request.getParameter("id_cliente"));
+            Cliente cli = Logic.getUsuarioDB(id_cliente);
+            String jsonCliente = new Gson().toJson(cli);
+            Log.log.info("JSON Client=> {}", jsonCliente);
+            out.println(jsonCliente);
+        } catch (Exception e) {
+            out.println("-1");
+            Log.log.error("Exception: {}", e);
+        } finally {
+            out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -71,7 +78,7 @@ public class ServletPrueba extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
     }
 
     /**

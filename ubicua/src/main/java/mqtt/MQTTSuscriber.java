@@ -96,7 +96,7 @@ public class MQTTSuscriber implements MqttCallback
                         newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getHay_paquete(), message.toString());
 
                 //Store the information of the sensor
-                Logic.storeNewMeasurement(newTopic);
+                //Logic.storeNewMeasurement(newTopic);
             } else if (topic.contains("abrir")) {
                 newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
                 newTopic.setIdTaquilla(topics[1].replace("Taquilla", ""));

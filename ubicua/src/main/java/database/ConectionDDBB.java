@@ -159,4 +159,10 @@ public class ConectionDDBB {
     {
     	return getStatement(con,"INSERT INTO UBICOMP.MEASUREMENT VALUES (?,?)");  	
     }
+    
+    //Statements PARA NUESTRO PROYECTO
+    
+    public static PreparedStatement GetCliente(Connection con) {
+        return getStatement(con, "SELECT * FROM CLIENTE WHERE id_cliente= ?;");
+    }
 }
