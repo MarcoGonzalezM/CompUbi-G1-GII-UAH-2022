@@ -101,11 +101,47 @@ public class Logic {
             Log.log.debug("Database Connected");
             
             PreparedStatement ps = ConectionDDBB.UpdateOcupadoTaquilla(con);
-            Log.log.info("Query=> {}", ps.toString());
             
             ps.setBoolean(1, ocupado);
             ps.setInt(2, idTaquilla);
             ps.setInt(3, idTaquillero);
+            
+            Log.log.info("Query=> {}", ps.toString());
+            
+            ps.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            Log.log.error("Error: {}", e);
+        } catch (NullPointerException e)
+        {
+            Log.log.error("Error: {}", e);
+        } catch (Exception e)
+        {
+            Log.log.error("Error:{}", e);
+        } finally
+        {
+            conector.closeConnection(con);
+        }
+    }
+    
+    public static void updateEstadoTaquilla(int idTaquillero, int idTaquilla, int estado)
+    {
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        
+        try
+        {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            
+            PreparedStatement ps = ConectionDDBB.UpdateEstadoTaquilla(con);
+            
+            ps.setInt(1, estado);
+            ps.setInt(2, idTaquilla);
+            ps.setInt(3, idTaquillero);
+            
+            Log.log.info("Query=> {}", ps.toString());
             
             ps.executeUpdate();
         }

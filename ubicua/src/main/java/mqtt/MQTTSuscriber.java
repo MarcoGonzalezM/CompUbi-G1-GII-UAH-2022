@@ -21,26 +21,26 @@ import logic.Logic;
 public class MQTTSuscriber implements MqttCallback
 {
 	public void searchTopicsToSuscribe(MQTTBroker broker){
-		ConectionDDBB conector = new ConectionDDBB();
-		Connection con = null;
-		ArrayList<String> topics = new ArrayList<>();
-		try{
-			con = conector.obtainConnection(true);
-			Log.logmqtt.debug("Database Connected");
-			
-			//Get Cities to search the main topic
-			PreparedStatement psTaquilleros = ConectionDDBB.GetTaquilleros(con);
-			Log.logmqtt.debug("Query to search taquilleros=> {}", psTaquilleros.toString());
-			ResultSet rsTaquilleros = psTaquilleros.executeQuery();
-			while (rsTaquilleros.next()){
-				topics.add("Taquilleros" + rsTaquilleros.getInt("ID")+"/#");
-			}
-			topics.add("test");
-			suscribeTopic(broker, topics);			
-		} 
-		catch (NullPointerException e){Log.logmqtt.error("Error: {}", e);} 
-		catch (Exception e){Log.logmqtt.error("Error:{}", e);} 
-		finally{conector.closeConnection(con);}
+            ConectionDDBB conector = new ConectionDDBB();
+            Connection con = null;
+            ArrayList<String> topics = new ArrayList<>();
+            try{
+                    con = conector.obtainConnection(true);
+                    Log.logmqtt.debug("Database Connected");
+
+                    //Get Cities to search the main topic
+                    PreparedStatement psTaquilleros = ConectionDDBB.GetTaquillasFromTaquillero(con);
+                    Log.logmqtt.debug("Query to search taquilleros=> {}", psTaquilleros.toString());
+                    ResultSet rsTaquilleros = psTaquilleros.executeQuery();
+                    while (rsTaquilleros.next()){
+                            topics.add("Taquilleros" + rsTaquilleros.getInt("ID")+"/#");
+                    }
+                    topics.add("test");
+                    suscribeTopic(broker, topics);			
+            } 
+            catch (NullPointerException e){Log.logmqtt.error("Error: {}", e);} 
+            catch (Exception e){Log.logmqtt.error("Error:{}", e);} 
+            finally{conector.closeConnection(con);}
 	}
 	
         
@@ -76,11 +76,6 @@ public class MQTTSuscriber implements MqttCallback
 	{	
 	}
 
-        
-        
-        
-        
-        
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception 
 	{
@@ -88,57 +83,50 @@ public class MQTTSuscriber implements MqttCallback
             String[] topics = topic.split("/");
             Topics newTopic = new Topics();
             newTopic.setValue(message.toString());
-            if (topic.contains("hay_paquete")) {
+            if (topic.contains("hay_paquete"))
+            {
                 newTopic.setIdTaquillero(Integer.parseInt(topics[0].replace("Taquillero", "")));
                 newTopic.setIdTaquilla(Integer.parseInt(topics[1].replace("Taquilla", "")));
                 newTopic.setHay_paquete(topics[2]);
                 
                 if(newTopic.getValue().equals("Si"))
                 {
-                    
-                    
+                    Logic.updateOcupadoTaquilla(newTopic.getIdTaquillero(), newTopic.getIdTaquilla() , true);
                 }
-                if(newTopic.getValue().equals("No"))
+                else if(newTopic.getValue().equals("No"))
                 {
-                    
-                    
+                    Logic.updateOcupadoTaquilla(newTopic.getIdTaquillero(), newTopic.getIdTaquilla() , false);
                 }
                 
                 Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}, Hay_paquete{}: {}",
                         newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getHay_paquete(), message.toString());
 
-            } else if (topic.contains("estado")) {
-                newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
-                newTopic.setIdTaquilla(topics[1].replace("Taquilla", ""));
-                newTopic.setEstado(topics[2].replace("Estado", ""));
+            }
+            else if (topic.contains("estado"))
+            {
+                newTopic.setIdTaquillero(Integer.parseInt(topics[0].replace("Taquillero", "")));
+                newTopic.setIdTaquilla(Integer.parseInt(topics[1].replace("Taquilla", "")));
+                newTopic.setEstado(topics[2]);
+                
+                if(newTopic.getValue().equals("Abierto"))
+                {
+                    Logic.updateEstadoTaquilla(newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), 0);
+                }
+                else if(newTopic.getValue().equals("Cerrado"))
+                {
+                    Logic.updateEstadoTaquilla(newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), 2);
+                }
+                else if(newTopic.getValue().equals("Autenticando"))
+                {
+                    Logic.updateEstadoTaquilla(newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), 1);
+                }
+                
                 Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}, Estado{}: {}",
                         newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getEstado(), message.toString());
             }
-            else {
-                if (topic.contains("clave")) {
-                    newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
-                    newTopic.setClave(topics[1].replace("Clave", ""));
-                    Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}: {}",
-                            newTopic.getIdTaquillero(), newTopic.getClave(), message.toString());
-                    //Logic.comprobarClave(newTopic);
-
-                    
-                } else if(topic.contains("taquilla")){
-                    newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
-                    newTopic.setIdTaquilla(topics[1].replace("Taquilla", ""));
-                    Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}: {}",
-                            newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), message.toString());
-
-                }
-                else {
-                    if (topic.contains("taquillero")) {
-                        newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
-                        Log.logmqtt.info("Mensaje from taquillero{}: {}",
-                                newTopic.getIdTaquillero(), message.toString());
-                    } else {
-
-                    }
-                }
+            else
+            {
+                
             }
 	}
 

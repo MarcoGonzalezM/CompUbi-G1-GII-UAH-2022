@@ -117,4 +117,9 @@ public class ConectionDDBB {
     {
         return getStatement(con, "UPDATE Taquilla SET ocupado = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
     }
+    
+    public static PreparedStatement UpdateEstadoTaquilla(Connection con)
+    {
+        return getStatement(con, "UPDATE Taquilla SET estado = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
+    }
 }
