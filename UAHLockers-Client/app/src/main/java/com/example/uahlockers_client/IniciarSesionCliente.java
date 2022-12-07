@@ -9,16 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class IniciarSesionCliente extends AppCompatActivity {
@@ -26,6 +16,8 @@ public class IniciarSesionCliente extends AppCompatActivity {
     private Button button1, button2;
     private EditText textUName, textPwd;
     private TextView textErrMess;
+    private String uname, hashPwd;
+    private int resultado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +55,12 @@ public class IniciarSesionCliente extends AppCompatActivity {
         for (int i=0;i<pwdBytes.length;i++){
             hashPwd += (char) ~pwdBytes[i];
         }
-        sendDatos(uname,hashPwd);
+        this.uname = uname;
+        // this.hashPwd = hashPwd;
+        this.hashPwd = pwd;
+        sendLogIn();
 
         // TODO: Recibir respuesta de validación del servidor
-        int resultado = readResponse();
         switch(resultado){
             case -1:{
                 textErrMess.setText("Error: el nombre de usuario no está registrado");
@@ -76,7 +70,7 @@ public class IniciarSesionCliente extends AppCompatActivity {
                 textErrMess.setText("Error: contraseña incorrecta");
                 break;
             }
-            case -3:{
+            case 0:{
                 textErrMess.setText("Error: no se pudo conectar al servidor");
                 break;
             }
@@ -90,55 +84,26 @@ public class IniciarSesionCliente extends AppCompatActivity {
         }
     }
 
-    private void sendDatos(String uname, String pwd){
-        String urlStr = "192.168.0.166:8080";
-        try {
-            URL url = new URL(urlStr);
-            HttpURLConnection urlConnection = null;
-            urlConnection = (HttpURLConnection) url.openConnection();
-            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-            out.write(uname.getBytes(StandardCharsets.UTF_8));
-            out.write(pwd.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String getUName(){
+        return this.uname;
     }
 
-    private int readResponse(){
-        String urlStr = "192.168.0.166:8080";
-        String response;
-        int resultado = -3;
-        try{
-            URL url = new URL(urlStr);
-            HttpURLConnection urlConnection = null;
-            urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            response = convertStreamToString(in);
-            resultado = Integer.valueOf(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return resultado;
+    public String getPwd(){
+        return this.hashPwd;
     }
 
-    //Get the input strean and convert into String
-    private String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
+    public void setResultado(int resultado){
+        this.resultado = resultado;
+    }
+
+    private void sendLogIn(){
+        String urlStr = "http://192.168.0.166:8080";
+        urlStr+="/uahlockers/iniciarSesion";
+        IniciarSesionServerConnectionThread thread = new IniciarSesionServerConnectionThread(this, urlStr);
         try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
-        } catch (IOException e) {
+            thread.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
-        return sb.toString();
     }
 }

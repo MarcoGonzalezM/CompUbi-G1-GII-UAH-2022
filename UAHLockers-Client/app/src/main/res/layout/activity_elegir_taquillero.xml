@@ -7,42 +7,6 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="-51dp">
 
-    <TextView
-        android:id="@+id/labelProdName"
-        android:layout_width="287dp"
-        android:layout_height="42dp"
-        android:text="Nombre del Producto:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.322"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.162" />
-
-
-    <TextView
-        android:id="@+id/labelStatus"
-        android:layout_width="287dp"
-        android:layout_height="42dp"
-        android:text="Estado del envío:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.322"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.268" />
-
-    <TextView
-        android:id="@+id/labelPIN"
-        android:layout_width="287dp"
-        android:layout_height="42dp"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.322"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.367" />
 
     <TextView
         android:id="@+id/Taquillero"
@@ -68,10 +32,10 @@
         app:layout_constraintVertical_bias="0.578" />
 
     <Button
-        android:id="@+id/buttonAuth"
+        android:id="@+id/buttonAccept"
         android:layout_width="163dp"
         android:layout_height="68dp"
-        android:text="Autenticarme"
+        android:text="Aceptar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

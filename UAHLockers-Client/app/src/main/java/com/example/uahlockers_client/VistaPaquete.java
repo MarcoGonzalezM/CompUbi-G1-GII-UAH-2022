@@ -4,20 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class VistaPaquete extends AppCompatActivity {
 
-    int idCliente, idProducto;
+    private int idCliente, idProducto;
+    private Button button1, button2;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_paquete);
 
-        Button button1 = (Button) findViewById(R.id.buttonAuth);
-        Button button2 = (Button) findViewById(R.id.buttonBack);
+        button1 = (Button) findViewById(R.id.buttonAuth);
+        button2 = (Button) findViewById(R.id.buttonBack);
+        spinner = (Spinner) findViewById(R.id.spinner);
 
         idCliente = getIntent().getIntExtra("idCliente",0);
         idProducto = getIntent().getIntExtra("idProducto",0);

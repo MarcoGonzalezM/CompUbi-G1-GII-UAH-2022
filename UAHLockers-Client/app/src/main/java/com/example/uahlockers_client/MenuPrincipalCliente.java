@@ -20,7 +20,8 @@ public class MenuPrincipalCliente extends AppCompatActivity {
         Button button1 = (Button) findViewById(R.id.button_pedir_paq);
         Button button2 = (Button) findViewById(R.id.button_mis_paq);
         Button button3 = (Button) findViewById(R.id.button_mis_not);
-        Button button4 = (Button) findViewById(R.id.button_cerr_ses);
+        Button button4 = (Button) findViewById(R.id.button_elgir_taq);
+        Button button5 = (Button) findViewById(R.id.button_cerr_ses);
 
         idCliente = getIntent().getIntExtra("idCliente",0);
 
@@ -57,13 +58,21 @@ public class MenuPrincipalCliente extends AppCompatActivity {
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MenuPrincipalCliente.this, IniciarSesionCliente.class);
+                Intent i = new Intent(MenuPrincipalCliente.this, ElegirTaquillero.class);
                 startActivity(i);
                 i.putExtra("idCliente", idCliente);
                 finish();
             }
         });
 
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MenuPrincipalCliente.this, IniciarSesionCliente.class);
+                startActivity(i);
+                i.putExtra("idCliente", idCliente);
+                finish();
+            }
+        });
     }
-
 }
