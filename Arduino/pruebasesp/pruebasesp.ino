@@ -128,7 +128,7 @@ void callback(char* topic, byte* message, unsigned int length)
   
   for(int i = 0; i < numTaquillas; i++)
   {
-    if(strTopic == nombreTaquillero + "/Taquilla" + taquillas[i].getId() + "/abrir")
+    if(strTopic == nombreTaquillero + "/Taquilla" + taquillas[i].getId() + "/accion")
     {
       String topic = nombreTaquillero + "/Taquilla" + taquillas[i].getId() +  + "/estado";
       char buff[topic.length()+1];
@@ -157,7 +157,6 @@ void callback(char* topic, byte* message, unsigned int length)
 
         if(taquillas[i].getEstado())
         {
-          
           client.publish(buffp, "Si");
         }
         else
