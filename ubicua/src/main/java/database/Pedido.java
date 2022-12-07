@@ -23,6 +23,8 @@ public class Pedido {
         this.estado_apertura = 0;
         this.codigo = null;
     }
+    
+    
 
     
    
