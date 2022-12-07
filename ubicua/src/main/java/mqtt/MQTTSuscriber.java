@@ -119,7 +119,7 @@ public class MQTTSuscriber implements MqttCallback
                     newTopic.setClave(topics[1].replace("Clave", ""));
                     Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}: {}",
                             newTopic.getIdTaquillero(), newTopic.getClave(), message.toString());
-                    Logic.comprobarClave(newTopic);
+                    //Logic.comprobarClave(newTopic);
 
                     
                 } else if(topic.contains("taquilla")){

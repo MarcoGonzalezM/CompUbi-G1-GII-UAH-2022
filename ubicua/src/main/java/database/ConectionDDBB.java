@@ -1,4 +1,4 @@
-package database;
+    package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +23,7 @@ public class ConectionDDBB {
             try {
                 Context ctx = new InitialContext();
                 // Get the connection factory configured in Tomcat
-                DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/ubicomp");
+                DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/postgres");
 
                 // Obtiene una conexion
                 con = ds.getConnection();
