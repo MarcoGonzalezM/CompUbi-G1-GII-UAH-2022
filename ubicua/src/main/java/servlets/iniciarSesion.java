@@ -44,13 +44,13 @@ public class iniciarSesion extends HttpServlet {
             Cliente cli = Logic.getUsuarioDB(nombre);
             if (cli.getId_cliente() == 0) {
                 //Cliente no existe
-                out.println("-1");
+                out.print("-1");
             }
             else if (password.equals(cli.getPassword())) {
-                out.println(Integer.toString(cli.getId_cliente()));
+                out.print(Integer.toString(cli.getId_cliente()));
             } else {
                 //Contraseña incorrecta
-                out.println("-2");
+                out.print("-2");
             }
         } catch (Exception e) {
             out.println("EXCEPCION");
@@ -98,5 +98,5 @@ public class iniciarSesion extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
 }
