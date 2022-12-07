@@ -96,73 +96,21 @@ public class ConectionDDBB {
     }
     
     //************** CALLS TO THE DATABASE ***************************//
-    public static PreparedStatement GetTaquillasFromTaquillero(Connection con)
-    {
-    	return getStatement(con,"SELECT id_taquilla FROM TAQUILLA WHERE id_taquillero_taquillero= ?");  	
-    }    
-    public static PreparedStatement GetStationsFromCity(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM WHEATHERSTATION.STATION WHERE CITY_ID=?");  	
-    } 
-    
-    public static PreparedStatement GetStationSensors(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM SENSORTYPE LEFT OUTER JOIN STATION_SENSORTYPE ON SENSORTYPE.ID=STATION_SENSORTYPE.SENSORTYPE_ID and STATION_ID=?;");  	
-    }
-    
-    public static PreparedStatement GetStationSensorMeasurementLastDays(Connection con)
-    {
-    	return getStatement(con,"SELECT date(DATE) as date, min(VALUE) as min, max(VALUE) as max, avg(VALUE) as avg, dayofweek(DATE) as dayofweek FROM MEASUREMENT WHERE STATION_ID=? AND SENSORTYPE_ID=? and date(DATE)>=date(now()) - INTERVAL ? DAY and DATE<=now() group by date(DATE) ORDER BY DATE ASC;");  	
-    }
-    
-    public static PreparedStatement GetStationSensorMeasurementLastMonths(Connection con)
-    {
-    	return getStatement(con,"SELECT month(DATE) as month,min(VALUE) as min, max(VALUE) as max, avg(VALUE) as avg FROM MEASUREMENT WHERE STATION_ID=? AND SENSORTYPE_ID=? and date(DATE)>=date(now()) - INTERVAL ? DAY group by month(DATE) ORDER BY DATE ASC;");  	
-    }
-    
-    public static PreparedStatement GetCities(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM CITY;");  	
-    }
-    
-    public static PreparedStatement InsertWeatherForecast(Connection con)
-    {
-    	return getStatement(con,"INSERT INTO MEASUREMENT (STATION_ID, SENSORTYPE_ID, DATE, VALUE) VALUES (?,?,?,?) ON duplicate key update STATION_ID=?, SENSORTYPE_ID=?, DATE=?, VALUE=?;");  	
-    }
-    
-    public static PreparedStatement GetStationSensorMeasurementMonth(Connection con)
-    {
-    	return getStatement(con,"SELECT month(DATE) as date,  min(VALUE) as min, max(VALUE) as max, avg(VALUE) as avg FROM MEASUREMENT WHERE STATION_ID=? AND SENSORTYPE_ID=? group by month(DATE) ORDER BY DATE ASC;");  	
-    }
-    
-    public static PreparedStatement GetLastValueStationSensor(Connection con)
-    {
-    	return getStatement(con,"select * from MEASUREMENT where STATION_ID=? AND SENSORTYPE_ID= ? ORDER BY DATE LIMIT 1;");  	
-    }
-    
-    public static PreparedStatement GetInfoFromStation(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM WHEATHERSTATION.STATION WHERE ID=?;");  	
-    }
-    
-    public static PreparedStatement InsertnewMeasurement(Connection con)
-    {
-    	return getStatement(con,"INSERT INTO MEASUREMENT (STATION_ID, SENSORTYPE_ID, DATE, VALUE) VALUES (?,?,?,?) ON duplicate key update STATION_ID=?, SENSORTYPE_ID=?, DATE=?, VALUE=?;");  	
-    }
-
-    public static PreparedStatement GetDataBD(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM UBICOMP.MEASUREMENT");  	
-    }
-    
-    public static PreparedStatement SetDataBD(Connection con)
-    {
-    	return getStatement(con,"INSERT INTO UBICOMP.MEASUREMENT VALUES (?,?)");  	
-    }
     
     //Statements PARA NUESTRO PROYECTO
     
-    public static PreparedStatement GetCliente(Connection con) {
+    public static PreparedStatement GetCliente(Connection con) 
+    {
         return getStatement(con, "SELECT * FROM CLIENTE WHERE nombre= ?;");
     }
+    
+    public static PreparedStatement GetTaquillasFromTaquillero(Connection con)
+    {
+    	return getStatement(con,"SELECT id_taquilla FROM TAQUILLA WHERE id_taquillero_taquillero= ?");  	
+    }  
+    
+    public static PreparedStatement GetTaquilleros(Connection con)
+    {
+    	return getStatement(con,"SELECT * FROM TAQUILLEROS");  	
+    }  
 }
