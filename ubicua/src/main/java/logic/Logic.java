@@ -21,7 +21,7 @@ public class Logic {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static Cliente getUsuarioDB(int id_usuario) {
+    public static Cliente getUsuarioDB(String nombre) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
         Cliente nuevoCliente = new Cliente();
@@ -29,13 +29,14 @@ public class Logic {
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.GetCliente(con);
-            ps.setInt(1, id_usuario);
+            ps.setString(1, nombre);
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
-
-            nuevoCliente.setNombre(rs.getString("nombre"));
-            nuevoCliente.setPassword(rs.getString("password"));
-            nuevoCliente.setId_cliente(rs.getInt("id_cliente"));
+            if (rs.next()) {
+                nuevoCliente.setNombre(rs.getString("nombre"));
+                nuevoCliente.setPassword(rs.getString("password"));
+                nuevoCliente.setId_cliente(rs.getInt("id_cliente"));
+            }
 
         } catch (SQLException e) {
             Log.log.error("Error: {}", e);

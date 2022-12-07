@@ -163,6 +163,6 @@ public class ConectionDDBB {
     //Statements PARA NUESTRO PROYECTO
     
     public static PreparedStatement GetCliente(Connection con) {
-        return getStatement(con, "SELECT * FROM CLIENTE WHERE id_cliente= ?;");
+        return getStatement(con, "SELECT * FROM CLIENTE WHERE nombre= ?;");
     }
 }

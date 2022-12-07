@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import database.Cliente;
+import java.net.Socket;
 import logic.Log;
 import logic.Logic;
 
@@ -23,7 +24,7 @@ import logic.Logic;
  * @author Heras
  */
 @WebServlet(name = "ServletPrueba", urlPatterns = {"/ServletPrueba"})
-public class ServletPrueba extends HttpServlet {
+public class iniciarSesion extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,8 +40,9 @@ public class ServletPrueba extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            int id_cliente = Integer.parseInt(request.getParameter("id_cliente"));
-            Cliente cli = Logic.getUsuarioDB(id_cliente);
+            String nombre = request.getParameter("nombre");
+            String password = request.getParameter("password");
+            Cliente cli = Logic.getUsuarioDB(nombre);
             String jsonCliente = new Gson().toJson(cli);
             Log.log.info("JSON Client=> {}", jsonCliente);
             out.println(jsonCliente);
