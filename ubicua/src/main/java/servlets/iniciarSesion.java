@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import database.Cliente;
+import java.nio.charset.StandardCharsets;
 import logic.Log;
 import logic.Logic;
 
@@ -41,17 +42,21 @@ public class iniciarSesion extends HttpServlet {
         try {
             String nombre = request.getParameter("nombre");
             String password = request.getParameter("password");
+            //password = unhash(password);
             Cliente cli = Logic.getUsuarioDB(nombre);
             if (cli.getId_cliente() == 0) {
                 //Cliente no existe
                 out.print("-1");
-            }
-            else if (password.equals(cli.getPassword())) {
+            } else if (password.equals(cli.getPassword())) {
                 out.print(Integer.toString(cli.getId_cliente()));
             } else {
                 //Contraseña incorrecta
                 out.print("-2");
             }
+
+        } catch (NullPointerException e) {
+            out.print("-1");
+            Log.log.error("Exception: {}", e);
         } catch (Exception e) {
             out.println("EXCEPCION");
             Log.log.error("Exception: {}", e);
@@ -98,5 +103,13 @@ public class iniciarSesion extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
+    public String unhash(String pwd) {
+        byte[] pwdBytes = pwd.getBytes(StandardCharsets.UTF_8);
+        String hashPwd = "";
+        for (int i = 0; i < pwdBytes.length; i++) {
+            hashPwd += (char) ~pwdBytes[i];
+        }
+        return hashPwd;
+    }
 }
