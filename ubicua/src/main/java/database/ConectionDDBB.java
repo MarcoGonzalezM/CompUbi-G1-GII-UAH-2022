@@ -96,9 +96,9 @@ public class ConectionDDBB {
     }
     
     //************** CALLS TO THE DATABASE ***************************//
-    public static PreparedStatement GetTaquilleros(Connection con)
+    public static PreparedStatement GetTaquillasFromTaquillero(Connection con)
     {
-    	return getStatement(con,"SELECT * FROM TAQUILLEROS");  	
+    	return getStatement(con,"SELECT id_taquilla FROM TAQUILLA WHERE id_taquillero_taquillero= ?");  	
     }    
     public static PreparedStatement GetStationsFromCity(Connection con)
     {
