@@ -165,4 +165,9 @@ public class ConectionDDBB {
     public static PreparedStatement GetCliente(Connection con) {
         return getStatement(con, "SELECT * FROM CLIENTE WHERE nombre= ?;");
     }
+    
+    public static PreparedStatement UpdateOcupadoTaquilla(Connection con)
+    {
+        return getStatement(con, "UPDATE Taquilla SET ocupado = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
+    }
 }

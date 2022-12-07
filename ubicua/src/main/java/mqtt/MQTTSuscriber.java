@@ -89,20 +89,23 @@ public class MQTTSuscriber implements MqttCallback
             Topics newTopic = new Topics();
             newTopic.setValue(message.toString());
             if (topic.contains("hay_paquete")) {
-                newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
-                newTopic.setIdTaquilla(topics[1].replace("Taquilla", ""));
-                newTopic.setHay_paquete(topics[2].replace("Hay_paquete", ""));
+                newTopic.setIdTaquillero(Integer.parseInt(topics[0].replace("Taquillero", "")));
+                newTopic.setIdTaquilla(Integer.parseInt(topics[1].replace("Taquilla", "")));
+                newTopic.setHay_paquete(topics[2]);
+                
+                if(newTopic.getValue().equals("Si"))
+                {
+                    
+                    
+                }
+                if(newTopic.getValue().equals("No"))
+                {
+                    
+                    
+                }
+                
                 Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}, Hay_paquete{}: {}",
                         newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getHay_paquete(), message.toString());
-
-                //Store the information of the sensor
-                //Logic.storeNewMeasurement(newTopic);
-            } else if (topic.contains("abrir")) {
-                newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
-                newTopic.setIdTaquilla(topics[1].replace("Taquilla", ""));
-                newTopic.setAbrir(topics[2].replace("Abrir", ""));
-                Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}, Abrir{}: {}",
-                        newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getAbrir(), message.toString());
 
             } else if (topic.contains("estado")) {
                 newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
@@ -111,8 +114,6 @@ public class MQTTSuscriber implements MqttCallback
                 Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}, Estado{}: {}",
                         newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getEstado(), message.toString());
             }
-            
-            
             else {
                 if (topic.contains("clave")) {
                     newTopic.setIdTaquillero(topics[0].replace("Taquillero", ""));
