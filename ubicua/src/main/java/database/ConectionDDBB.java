@@ -110,7 +110,7 @@ public class ConectionDDBB {
     
     public static PreparedStatement GetTaquilleros(Connection con)
     {
-    	return getStatement(con,"SELECT * FROM TAQUILLEROS");  	
+    	return getStatement(con,"SELECT * FROM TAQUILLERO");  	
     } 
     
     public static PreparedStatement UpdateOcupadoTaquilla(Connection con)
