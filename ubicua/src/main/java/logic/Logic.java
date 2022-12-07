@@ -50,6 +50,34 @@ public class Logic {
         return nuevoCliente;
     }
 
+    public static Repartidor getRepartidorDB(String nombre) {
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        Repartidor nuevoRepartidor = new Repartidor();
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.GetRepartidor(con);
+            ps.setString(1, nombre);
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nuevoRepartidor.setNombre(rs.getString("nombre"));
+                nuevoRepartidor.setPassword(rs.getString("password"));
+                nuevoRepartidor.setId_repartidor(rs.getInt("id_repartidor"));
+            }
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+        } catch (Exception e) {
+            Log.log.error("Error:{}", e);
+        } finally {
+            conector.closeConnection(con);
+        }
+        return nuevoRepartidor;
+    }
+
     public static ArrayList<Taquilla> getTaquillasFromTaquilleroDB() {
         ArrayList<Taquilla> taquillas = new ArrayList<Taquilla>();
 

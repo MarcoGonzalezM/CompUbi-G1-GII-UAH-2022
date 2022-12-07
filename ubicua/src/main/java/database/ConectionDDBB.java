@@ -1,4 +1,4 @@
-    package database;
+package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,17 +42,14 @@ public class ConectionDDBB {
         }
         return con;
     }
-    
-    public void closeTransaction(Connection con)
-    {
-        try
-          {
+
+    public void closeTransaction(Connection con) {
+        try {
             con.commit();
             Log.logdb.debug("Transaction closed");
-          } catch (SQLException ex)
-          {
+        } catch (SQLException ex) {
             Log.logdb.error("Error closing the transaction: {}", ex);
-          }
+        }
     }
 
     public void cancelTransaction(Connection con) {
@@ -80,7 +77,7 @@ public class ConectionDDBB {
             e.printStackTrace();
         }
     }
-    
+
     public static PreparedStatement getStatement(Connection con, String sql) {
         PreparedStatement ps = null;
         try {
@@ -94,32 +91,30 @@ public class ConectionDDBB {
 
         return ps;
     }
-    
+
     //************** CALLS TO THE DATABASE ***************************//
-    
     //Statements PARA NUESTRO PROYECTO
-    
     public static PreparedStatement GetCliente(Connection con) {
         return getStatement(con, "SELECT * FROM CLIENTE WHERE nombre= ?;");
     }
-    
-    public static PreparedStatement GetTaquillasFromTaquillero(Connection con)
-    {
-    	return getStatement(con,"SELECT id_taquilla FROM TAQUILLA WHERE id_taquillero_taquillero= ?");  	
-    }    
-    
-    public static PreparedStatement GetTaquilleros(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM TAQUILLERO");  	
-    } 
-    
-    public static PreparedStatement UpdateOcupadoTaquilla(Connection con)
-    {
+
+    public static PreparedStatement GetRepartidor(Connection con) {
+        return getStatement(con, "SELECT * FROM repartidor WHERE nombre= ?;");
+    }
+
+    public static PreparedStatement GetTaquillasFromTaquillero(Connection con) {
+        return getStatement(con, "SELECT id_taquilla FROM TAQUILLA WHERE id_taquillero_taquillero= ?");
+    }
+
+    public static PreparedStatement GetTaquilleros(Connection con) {
+        return getStatement(con, "SELECT * FROM TAQUILLERO");
+    }
+
+    public static PreparedStatement UpdateOcupadoTaquilla(Connection con) {
         return getStatement(con, "UPDATE Taquilla SET ocupado = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
     }
-    
-    public static PreparedStatement UpdateEstadoTaquilla(Connection con)
-    {
+
+    public static PreparedStatement UpdateEstadoTaquilla(Connection con) {
         return getStatement(con, "UPDATE Taquilla SET estado = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
     }
 }

@@ -2,20 +2,22 @@
 package database;
 
 public class Repartidor {
-    private String correo_repartidor;
+    private String nombre;
     private String password;
+    private int id_repartidor;
 
-    public Repartidor(String correo_repartidor, String password) {
-        this.correo_repartidor = null;
+    public Repartidor() {
+        this.nombre = null;
         this.password = null;
+        this.id_repartidor = 0;
     }
 
-    public String getCorreo_repartidor() {
-        return correo_repartidor;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setCorreo_repartidor(String correo_repartidor) {
-        this.correo_repartidor = correo_repartidor;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getPassword() {
@@ -25,6 +27,15 @@ public class Repartidor {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
+    public int getId_repartidor() {
+        return id_repartidor;
+    }
+
+    public void setId_repartidor(int id_repartidor) {
+        this.id_repartidor = id_repartidor;
+    }
+
+
     
 }
