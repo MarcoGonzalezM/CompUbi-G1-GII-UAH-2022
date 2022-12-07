@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import database.Cliente;
-import java.net.Socket;
 import logic.Log;
 import logic.Logic;
 
@@ -23,7 +22,7 @@ import logic.Logic;
  *
  * @author Heras
  */
-@WebServlet(name = "ServletPrueba", urlPatterns = {"/ServletPrueba"})
+@WebServlet(name = "iniciarSesion", urlPatterns = {"/iniciarSesion"})
 public class iniciarSesion extends HttpServlet {
 
     /**
@@ -43,11 +42,18 @@ public class iniciarSesion extends HttpServlet {
             String nombre = request.getParameter("nombre");
             String password = request.getParameter("password");
             Cliente cli = Logic.getUsuarioDB(nombre);
-            String jsonCliente = new Gson().toJson(cli);
-            Log.log.info("JSON Client=> {}", jsonCliente);
-            out.println(jsonCliente);
+            if (cli.getId_cliente() == 0) {
+                //Cliente no existe
+                out.println("-1");
+            }
+            else if (password.equals(cli.getPassword())) {
+                out.println(Integer.toString(cli.getId_cliente()));
+            } else {
+                //Contraseña incorrecta
+                out.println("-2");
+            }
         } catch (Exception e) {
-            out.println("-1");
+            out.println("EXCEPCION");
             Log.log.error("Exception: {}", e);
         } finally {
             out.close();
