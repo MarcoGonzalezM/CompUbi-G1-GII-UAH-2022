@@ -201,4 +201,39 @@ public class Logic {
         return taquilleros;
     }
 
+    public static ArrayList<Recogida_autenticar> getRecogidaNotificaciones() {
+        ArrayList<Recogida_autenticar> recogidas = new ArrayList<Recogida_autenticar>();
+
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+
+            PreparedStatement ps = ConectionDDBB.getRecogida_autenticar(con);
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Recogida_autenticar notificacion = new Recogida_autenticar();
+                notificacion.setDescripcion(rs.getString("descripcion"));
+                notificacion.setId_pedido(rs.getInt("id_pedido_pedido"));
+                notificacion.setId_recogida(rs.getInt("id_recogida"));
+                notificacion.setRecogido(rs.getBoolean("recogido"));
+                
+                recogidas.add(notificacion);
+            }
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+            recogidas = new ArrayList<Recogida_autenticar>();
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+            recogidas = new ArrayList<Recogida_autenticar>();
+        } catch (Exception e) {
+            Log.log.error("Error:{}", e);
+            recogidas = new ArrayList<Recogida_autenticar>();
+        } finally {
+            conector.closeConnection(con);
+        }
+        return recogidas;
+    }
 }

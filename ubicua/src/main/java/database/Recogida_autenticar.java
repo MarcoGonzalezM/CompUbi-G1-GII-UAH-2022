@@ -3,15 +3,13 @@ package database;
 
 public class Recogida_autenticar {
 
-    private int id_notificacion;
-    private String titulo;
+    private int id_recogida;
     private String descripcion;
     private int id_pedido;
     private boolean recogido;
 
     public Recogida_autenticar() {
-        this.id_notificacion = 0;
-        this.titulo = null;
+        this.id_recogida = 0;
         this.descripcion = null;
         this.id_pedido = 0;
         this.recogido = false;
@@ -42,21 +40,12 @@ public class Recogida_autenticar {
         this.descripcion = descripcion;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public int getId_recogida() {
+        return id_recogida;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setId_recogida(int id_recogida) {
+        this.id_recogida = id_recogida;
     }
 
-    public int getId_notificacion() {
-        return id_notificacion;
-    }
-
-    public void setId_notificacion(int id_notificacion) {
-        this.id_notificacion = id_notificacion;
-    }
-
-    
 }
