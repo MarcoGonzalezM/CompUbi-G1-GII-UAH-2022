@@ -36,7 +36,7 @@ public class MQTTSuscriber implements MqttCallback
             
             //Se suscribe a todos los taqulleros EX: Taquillero1/#
             while (rsTaquilleros.next()){
-                    topics.add("Taquillero" + rsTaquilleros.getInt("ID")+"/#");
+                    topics.add("Taquillero" + rsTaquilleros.getInt("id_taquillero")+"/#");
             }
             
             suscribeTopic(broker, topics);			
