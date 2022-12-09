@@ -47,7 +47,7 @@ public class MQTTSuscriber implements MqttCallback
                 topics.add("Taquillero" + rsTaquilleros.getInt("id_taquillero")+"/#");
             }
             
-            suscribeTopic(broker, topics);			
+            suscribeTopic(broker, topics);	
         } 
         
         catch (NullPointerException e){Log.logmqtt.error("Error: {}", e);} 
@@ -111,6 +111,8 @@ public class MQTTSuscriber implements MqttCallback
             {
                 Logic.updateOcupadoTaquilla(newTopic.getIdTaquillero(), newTopic.getIdTaquilla() , false);
             }
+            
+            MQTTPublisher.publish(susBroker, "test/llega", "llega");
 
             Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}, Hay_paquete{}: {}",
                     newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getHay_paquete(), message.toString());
@@ -147,6 +149,10 @@ public class MQTTSuscriber implements MqttCallback
             {
                 MQTTPublisher.publish(susBroker, "Taquillero"+ newTopic.getIdTaquillero() + "/Taquilla", clave);
             }
+        }
+        else
+        {
+            MQTTPublisher.publish(susBroker, "test/noes", "no llega");
         }
         
     }
