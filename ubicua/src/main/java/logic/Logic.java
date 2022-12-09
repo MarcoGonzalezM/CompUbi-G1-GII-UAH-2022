@@ -236,4 +236,11 @@ public class Logic {
         }
         return recogidas;
     }
+    
+    public static boolean validarClaveTaquillero(int taquillero, String clave)
+    {
+        boolean valido = false;
+        
+        return valido;
+    }
 }
