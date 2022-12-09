@@ -38,7 +38,7 @@ public class MQTTSuscriber implements MqttCallback
             Log.logmqtt.debug("Database Connected");
 
             //Get Cities to search the main topic
-            PreparedStatement psTaquilleros = ConectionDDBB.GetTaquillasFromTaquillero(con);
+            PreparedStatement psTaquilleros = ConectionDDBB.GetTaquilleros(con);
             Log.logmqtt.debug("Query to search taquilleros=> {}", psTaquilleros.toString());
             ResultSet rsTaquilleros = psTaquilleros.executeQuery();
             
