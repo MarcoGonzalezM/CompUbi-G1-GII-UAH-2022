@@ -11,15 +11,15 @@ public class MQTTBroker
 	}
 
 	public static int getQos() {
-		return qos;
+            return qos;
 	}
 
 	public static String getBroker() {
-		return broker;
+            return broker;
 	}
 
 	public static String getClientId() {
-		return clientId;
+            return clientId;
 	}			
 }
 

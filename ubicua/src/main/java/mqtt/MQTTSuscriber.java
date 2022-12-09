@@ -20,6 +20,14 @@ import logic.Logic;
 
 public class MQTTSuscriber implements MqttCallback
 {
+    private MQTTBroker susBroker;
+    
+    public MQTTSuscriber(MQTTBroker broker)
+    {
+        this.susBroker = broker;
+    }
+    
+    
     public void searchTopicsToSuscribe(MQTTBroker broker){
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
@@ -36,7 +44,7 @@ public class MQTTSuscriber implements MqttCallback
             
             //Se suscribe a todos los taqulleros EX: Taquillero1/#
             while (rsTaquilleros.next()){
-                    topics.add("Taquillero" + rsTaquilleros.getInt("id_taquillero")+"/#");
+                topics.add("Taquillero" + rsTaquilleros.getInt("id_taquillero")+"/#");
             }
             
             suscribeTopic(broker, topics);			
@@ -64,7 +72,7 @@ public class MQTTSuscriber implements MqttCallback
             for (int i = 0; i < topics.size(); i++) {
                 sampleClient.subscribe(topics.get(i));
                 Log.logmqtt.info("Subscribed to {}", topics.get(i));
-        }
+            }
 
         } catch (MqttException me) {
             Log.logmqtt.error("Error suscribing topic: {}", me);
@@ -88,6 +96,7 @@ public class MQTTSuscriber implements MqttCallback
         String[] topics = topic.split("/");
         Topics newTopic = new Topics();
         newTopic.setValue(message.toString());
+        
         if (topic.contains("hay_paquete"))
         {
             newTopic.setIdTaquillero(Integer.parseInt(topics[0].replace("Taquillero", "")));
@@ -128,6 +137,16 @@ public class MQTTSuscriber implements MqttCallback
 
             Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}, Estado{}: {}",
                     newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getEstado(), message.toString());
+        }
+        else if (topic.contains("clave"))
+        {
+            newTopic.setIdTaquillero(Integer.parseInt(topics[0].replace("Taquillero", "")));
+            String clave = newTopic.getValue();
+            
+            if (Logic.validarClaveTaquillero(newTopic.getIdTaquillero(), clave))
+            {
+                MQTTPublisher.publish(susBroker, "Taquillero"+ newTopic.getIdTaquillero() + "/Taquilla", clave);
+            }
         }
         
     }

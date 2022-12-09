@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebListener;
 
 import mqtt.MQTTBroker;
 import mqtt.MQTTSuscriber;
+import mqtt.MQTTPublisher;
 
 /**
  *	ES: Clase encargada de inicializar el sistema y de lanzar el hilo de previsi�n meteorol�gica
@@ -32,8 +33,9 @@ public class ProjectInitializer implements ServletContextListener
 	{
 		Log.log.info("-->Suscribe Topics<--");
 		MQTTBroker broker = new MQTTBroker();
-		MQTTSuscriber suscriber = new MQTTSuscriber();
+		MQTTSuscriber suscriber = new MQTTSuscriber(broker);
 		suscriber.searchTopicsToSuscribe(broker);
+                MQTTPublisher.publish(broker, "test/hola", "estoy");
 
 	}	
 }
