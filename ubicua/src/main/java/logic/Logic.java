@@ -16,6 +16,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Logic {
 
@@ -235,6 +238,95 @@ public class Logic {
             conector.closeConnection(con);
         }
         return recogidas;
+    }
+    
+    public static int pedirPaquetePrueba(int id_cliente, int taquillero){
+        int estado_final=0;
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            int id_pedido=getMaxIdPedido()+1;
+
+            PreparedStatement ps = ConectionDDBB.insertPedidoPrueba(con);
+            ps.setInt(1, id_pedido);
+            ps.setInt(2, id_cliente);
+            ps.setInt(3, taquillero);
+            String estado_entrega = "en reparto";
+            ps.setString(4, estado_entrega);
+            int clave = generarClave(taquillero);
+            ps.setInt(5,clave);
+            Log.log.info("Query=> {}", ps.toString());
+            int row = ps.executeUpdate();
+            
+            estado_final=1;
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+            estado_final = -1;
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+            estado_final = -1;
+        }finally {
+            conector.closeConnection(con);
+            estado_final=-1;
+        }
+        return estado_final;
+    }
+    
+    public static int generarClave(int taquillero){
+        ArrayList <Integer> claves = new ArrayList<Integer>();
+        int numero=0;
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.getClaves(con);
+            ps.setInt(1, taquillero);
+            String en_reparto = "en reparto";
+            String entregado = "entregado";
+            ps.setString(2, en_reparto);
+            ps.setString(3, entregado);
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int clave = 0;
+                clave = rs.getInt("clave");
+                claves.add(clave);
+            }
+            Random r = new Random();
+            numero = r.nextInt(8999) + 1001;
+            while (claves.contains(numero)){
+                numero = r.nextInt(8999) + 1001;
+            }
+            
+        }catch (SQLException ex) {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return numero;
+    }
+    
+    
+    public static int getMaxIdPedido(){
+        int id=0;
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.getMaxIdPedido(con);
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                id = rs.getInt("max_id_pedido");
+            }
+            
+            
+        }catch (SQLException ex) {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
     }
     
     public static boolean validarClaveTaquillero(int taquillero, String clave)

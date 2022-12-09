@@ -121,4 +121,16 @@ public class ConectionDDBB {
     public static PreparedStatement getRecogida_autenticar(Connection con) {
         return getStatement(con, "SELECT * FROM recogida_autenticar");
     }
+    
+    public static PreparedStatement getClaves(Connection con) {
+        return getStatement(con, "SELECT clave FROM taquillero NATURAL JOIN taquilla NATURAL JOIN pedido WHERE taquillero.id_taquillero = ? AND (pedido.estado_entrega = ? OR pedido.estado_entrega = ?)");
+    }
+    
+    public static PreparedStatement getMaxIdPedido(Connection con) {
+        return getStatement(con, "SELECT MAX(id_pedido) max_id_pedido FROM pedido");
+    }
+    
+    public static PreparedStatement insertPedidoPrueba(Connection con) {
+            return getStatement(con, "INSERT INTO pedido (id_pedido, id_cliente_cliente, id_taquillero_taquillero_taquilla, estado_entrega, codigo) values (?,?,?,?,?)");
+    }
 }
