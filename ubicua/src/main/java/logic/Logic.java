@@ -256,7 +256,7 @@ public class Logic {
             ps.setInt(1, id_pedido);
             ps.setInt(2, id_cliente);
             ps.setInt(3, taquillero);
-            String estado_entrega = "en reparto";
+            String estado_entrega = "creado";
             ps.setString(4, estado_entrega);
             int clave = generarClave(taquillero);
             ps.setInt(5,clave);
