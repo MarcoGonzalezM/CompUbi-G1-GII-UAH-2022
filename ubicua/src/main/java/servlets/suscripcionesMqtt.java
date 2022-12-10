@@ -8,22 +8,23 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-
 import java.nio.charset.StandardCharsets;
 import logic.Log;
-
+import mqtt.*;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
  *
  * @author Italo Joel Sandoval Amoretti
  */
-@WebServlet(name = "suscripcionesMqtt", urlPatterns =
-{
-    "/suscripcionesMqtt"
-})
-public class suscripcionesMqtt extends HttpServlet
-{
+@WebServlet(name = "suscripcionesMqtt", urlPatterns
+        = {
+            "/suscripcionesMqtt"
+        })
+public class suscripcionesMqtt extends HttpServlet {
+
+    MQTTBroker broker = new MQTTBroker();
+    MQTTSuscriber suscriber = new MQTTSuscriber(broker);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,32 +36,22 @@ public class suscripcionesMqtt extends HttpServlet
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        try
-        {
+        try {
             String topic = request.getParameter("topic");
             String mensaje = request.getParameter("mensaje");
-            
-            Log.log.info("Mensaje recibido: {} del topic {} ", mensaje, topic);
-            
-            out.print("Done");
-            
-        }
-        catch (NullPointerException e)
-        {
-            out.print("-1");
-            Log.log.error("Exception: {}", e);
-        }
-        catch (Exception e)
-        {
+
+            MqttMessage message = new MqttMessage();
+            message.setPayload(mensaje.getBytes(StandardCharsets.UTF_8));
+
+            suscriber.messageArrived(topic, message);
+
+        } catch (Exception e) {
             out.println("EXCEPCION");
             Log.log.error("Exception: {}", e);
-        }
-        finally
-        {
+        } finally {
             out.close();
         }
     }
@@ -76,8 +67,7 @@ public class suscripcionesMqtt extends HttpServlet
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -91,9 +81,8 @@ public class suscripcionesMqtt extends HttpServlet
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
-        processRequest(request, response);
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 
     /**
@@ -102,8 +91,7 @@ public class suscripcionesMqtt extends HttpServlet
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo()
-    {
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

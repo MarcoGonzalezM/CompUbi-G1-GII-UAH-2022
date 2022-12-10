@@ -22,10 +22,11 @@ public class MQTTSuscriber implements MqttCallback {
 
     private MQTTBroker susBroker;
     private MqttClient susClient;
+    MemoryPersistence persistence = new MemoryPersistence();
 
     public MQTTSuscriber(MQTTBroker broker) {
         try {
-            MemoryPersistence persistence = new MemoryPersistence();
+            
             this.susBroker = broker;
             this.susClient = new MqttClient(MQTTBroker.getBroker(), MQTTBroker.getClientId(), persistence);
         } catch (MqttException e) {
