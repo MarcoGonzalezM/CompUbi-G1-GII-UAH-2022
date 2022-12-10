@@ -134,6 +134,14 @@ public class ConectionDDBB {
             return getStatement(con, "INSERT INTO pedido (id_pedido, id_cliente_cliente, id_taquillero_taquillero_taquilla, estado_entrega, codigo) values (?,?,?,?,?)");
     }
     
+    public static PreparedStatement getPedidos(Connection con) {
+            return getStatement(con, "SELECT id_pedido,id_cliente,id_taquillero_taquillero_taquilla FROM pedido WHERE estado_entrega=?;");
+    }
+    
+    public static PreparedStatement UpdatePedido(Connection con) {
+        return getStatement(con, "UPDATE pedido SET estado = ?, id_repartidor=? where id_pedido = ?");
+    }
+    
     public static PreparedStatement getClavePedido(Connection con){
         return getStatement(con, "SELECT codigo, id_taquilla_taquilla, id_pedido FROM pedido WHERE id_taquillero_taquillero_taquilla = ? AND estado_entrega = 'entregado'");
     }

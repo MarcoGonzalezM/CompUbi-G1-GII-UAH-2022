@@ -1,11 +1,11 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package servlets;
 
-import com.google.gson.Gson;
-import database.Taquilla;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,9 +14,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import logic.Log;
 import logic.Logic;
 
-
-@WebServlet(name = "pedirPaquetePrueba", urlPatterns = {"/pedirPaquetePrueba"})
-public class pedirPaquetePrueba extends HttpServlet {
+/**
+ *
+ * @author mario.fernandezr
+ */
+@WebServlet(name = "asignarPedidoRepartidor", urlPatterns = {"/asignarPedidoRepartidor"})
+public class asignarPedidoRepartidor extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -24,28 +27,21 @@ public class pedirPaquetePrueba extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
+     * @throws jakarta.servlet.ServletException
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final long serialVersionUID = 1L;
-
-
-    public pedirPaquetePrueba() 
-    {
-        super();
-    }
-    
     protected void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws jakarta.servlet.ServletException, IOException {
-        Log.log.info("-- pidiendo paquete prueba information from DB--");
+        Log.log.info("-- asignando paquete information from DB--");
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            String cliente = request.getParameter("id_cliente");
-            String taquillero = request.getParameter("taquillero");
-            int id_cliente = Integer.parseInt(cliente);
-            int id_taquillero = Integer.parseInt(taquillero);
-            int estado_peticion_pedido = Logic.pedirPaquetePrueba(id_cliente,id_taquillero);
-            if (estado_peticion_pedido == 1) {
+            String repartidor = request.getParameter("id_repartidor");
+            String pedido = request.getParameter("id_pedido");
+            int id_repartidor = Integer.parseInt(repartidor);
+            int id_pedido = Integer.parseInt(pedido);
+            int estado_asignar_paquete = Logic.asignarPedidoaRepartidor(id_repartidor,id_pedido);
+            if (estado_asignar_paquete == 1) {
                 out.print("1");
             } else {
                 out.print("-1");
