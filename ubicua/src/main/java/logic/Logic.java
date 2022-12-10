@@ -424,4 +424,69 @@ public class Logic {
         }
 
     }
+    
+    public static ArrayList<Pedido> getPedidos(){
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+
+            PreparedStatement ps = ConectionDDBB.getPedidos(con);
+            ps.setString(1, "creado");
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Pedido pedido = new Pedido();
+
+                pedido.setId_pedido(rs.getInt("id_pedido"));
+                pedido.setCliente(rs.getString("id_cliente"));
+                pedido.setTaquillero(rs.getInt("id_taquillero_taquillero_taquilla"));
+
+                pedidos.add(pedido);
+            }
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+        } catch (Exception e) {
+            Log.log.error("Error:{}", e);
+        } finally {
+            conector.closeConnection(con);
+        }
+        return pedidos;
+    }
+    
+    public static int asignarPedidoaRepartidor(int id_pedido, int id_repartidor){
+        int estado_final=0;
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+
+            PreparedStatement ps = ConectionDDBB.UpdatePedido(con);
+            ps.setString(1, "en reparto");
+            ps.setInt(2, id_repartidor);
+            ps.setInt(3, id_pedido);
+            Log.log.info("Query=> {}", ps.toString());
+            int row = ps.executeUpdate();
+            if (row==1){
+                estado_final=1;
+            }
+            else{
+                estado_final=-1;
+            }
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+        } catch (Exception e) {
+            Log.log.error("Error:{}", e);
+        } finally {
+            conector.closeConnection(con);
+        }
+        return estado_final;
+    }
 }
