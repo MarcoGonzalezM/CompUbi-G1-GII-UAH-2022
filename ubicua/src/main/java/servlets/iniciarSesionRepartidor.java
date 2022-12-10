@@ -19,8 +19,8 @@ import logic.Logic;
  *
  * @author Heras
  */
-@WebServlet(name = "validarRepartidor", urlPatterns = {"/validarRepartidor"})
-public class validarRepartidor extends HttpServlet {
+@WebServlet(name = "iniciarSesionRepartidor", urlPatterns = {"/iniciarSesionRepartidor"})
+public class iniciarSesionRepartidor extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

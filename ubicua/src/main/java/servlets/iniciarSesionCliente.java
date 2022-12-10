@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-
 import database.Cliente;
 import java.nio.charset.StandardCharsets;
 import logic.Log;
@@ -20,8 +18,8 @@ import logic.Logic;
  *
  * @author Heras
  */
-@WebServlet(name = "iniciarSesion", urlPatterns = {"/iniciarSesion"})
-public class iniciarSesion extends HttpServlet {
+@WebServlet(name = "iniciarSesionCliente", urlPatterns = {"/iniciarSesionCliente"})
+public class iniciarSesionCliente extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
