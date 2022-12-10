@@ -419,9 +419,116 @@ public class Logic {
                 ps.executeUpdate();
             }
             
+        }
+        catch (SQLException ex)
+        {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateRecogidaAutenticar(boolean recogido, int id_recogida)
+    {
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        
+        try {
+            //Obtenemos el id del pedido correspondiente a la clave y taquillero
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.updateRecogidaAutenticar(con);
+            
+            ps.setBoolean(1, recogido);
+            ps.setInt(2, id_recogida);
+            
+            Log.log.info("Query=> {}", ps.toString());
+            ps.executeUpdate();
+
+        }
+        catch (SQLException ex)
+        {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updatePedidoEstadoEntrega(String estado_entrega, int id_pedido)
+    {
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        
+        try {
+            //Obtenemos el id del pedido correspondiente a la clave y taquillero
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.updatePedidoEstadoEntrega(con);
+            
+            ps.setString(1, estado_entrega);
+            ps.setInt(2, id_pedido);
+            
+            Log.log.info("Query=> {}", ps.toString());
+            ps.executeUpdate();
+
+        }
+        catch (SQLException ex)
+        {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static int getTaquillaPedido(int id_pedido)
+    {
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        
+        int taquilla = -1;
+        
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.getPedidoTaquillaTaquillero(con);
+            
+            ps.setInt(1, id_pedido);
+            
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                taquilla = rs.getInt("id_taquilla_taquilla");
+            }
+            
         }catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return taquilla;
+    }
+    
+    public static int getTaquilleroPedido(int id_pedido)
+    {
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        
+        int taquillero = -1;
+        
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.getPedidoTaquillaTaquillero(con);
+            
+            ps.setInt(1, id_pedido);
+            
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
 
+            if(rs.next())
+            {
+                taquillero = rs.getInt("id_taquillero_taquillero_taquilla");
+            }
+            
+        }catch (SQLException ex) {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return taquillero;
     }
 }

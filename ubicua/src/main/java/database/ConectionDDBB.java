@@ -145,4 +145,16 @@ public class ConectionDDBB {
     public static PreparedStatement insertRecogidaAutenticar(Connection con){
         return getStatement(con, "INSERT INTO recogida_autenticar (id_recogida, descripcion, id_pedido_pedido, recogido) values(?, ?, ?, ?)");
     }
+    
+    public static PreparedStatement updateRecogidaAutenticar(Connection con){
+        return getStatement(con, "UPDATE recogida_autenticar SET recogido = ? where id_recogida = ?");
+    }
+    
+    public static PreparedStatement updatePedidoEstadoEntrega(Connection con){
+        return getStatement(con, "UPDATE pedido SET estado_entrega = ? where id_pedido = ?");
+    }
+    
+    public static PreparedStatement getPedidoTaquillaTaquillero(Connection con){
+        return getStatement(con, "SELECT id_taquilla_taquilla, id_taquillero_taquillero_taquilla FROM pedido where id_pedido = ?");
+    }
 }
