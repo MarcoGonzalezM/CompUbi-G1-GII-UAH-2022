@@ -40,7 +40,8 @@ public class getRecogidaNotificaciones extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            ArrayList<Recogida_autenticar> recogidas = Logic.getRecogidaNotificaciones();
+            String idCliente = request.getParameter("id_cliente");
+            ArrayList<Recogida_autenticar> recogidas = Logic.getRecogidaNotificaciones(Integer.parseInt(idCliente));
             String jsonRecogidas = new Gson().toJson(recogidas);
             Log.log.info("JSON Values=> {}", recogidas);
             out.println(jsonRecogidas);

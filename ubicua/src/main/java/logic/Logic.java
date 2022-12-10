@@ -204,7 +204,7 @@ public class Logic {
         return taquilleros;
     }
 
-    public static ArrayList<Recogida_autenticar> getRecogidaNotificaciones() {
+    public static ArrayList<Recogida_autenticar> getRecogidaNotificaciones(int idCliente) {
         ArrayList<Recogida_autenticar> recogidas = new ArrayList<Recogida_autenticar>();
 
         ConectionDDBB conector = new ConectionDDBB();
@@ -215,6 +215,9 @@ public class Logic {
 
             PreparedStatement ps = ConectionDDBB.getRecogida_autenticar(con);
             Log.log.info("Query=> {}", ps.toString());
+            
+            ps.setInt(1, idCliente);
+            
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Recogida_autenticar notificacion = new Recogida_autenticar();
