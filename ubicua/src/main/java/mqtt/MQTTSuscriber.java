@@ -96,7 +96,6 @@ public class MQTTSuscriber implements MqttCallback {
         String[] topics = topic.split("/");
         Topics newTopic = new Topics();
         newTopic.setValue(message.toString());
-        MQTTPublisher.publish(susBroker, "test/noes", "no llega");
 
         if (topic.contains("hay_paquete")) {
             newTopic.setIdTaquillero(Integer.parseInt(topics[0].replace("Taquillero", "")));
@@ -108,8 +107,6 @@ public class MQTTSuscriber implements MqttCallback {
             } else if (newTopic.getValue().equals("No")) {
                 Logic.updateOcupadoTaquilla(newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), false);
             }
-
-            MQTTPublisher.publish(susBroker, "test/llega", "llega");
 
             Log.logmqtt.info("Mensaje from Taquillero{}, Taquilla{}, Hay_paquete{}: {}",
                     newTopic.getIdTaquillero(), newTopic.getIdTaquilla(), newTopic.getHay_paquete(), message.toString());
@@ -132,14 +129,15 @@ public class MQTTSuscriber implements MqttCallback {
         } else if (topic.contains("clave")) {
             newTopic.setIdTaquillero(Integer.parseInt(topics[0].replace("Taquillero", "")));
             String clave = newTopic.getValue();
+            int taquilla = Logic.validarClaveTaquillero(newTopic.getIdTaquillero(), clave);
 
-            if (Logic.validarClaveTaquillero(newTopic.getIdTaquillero(), clave)) {
-                MQTTPublisher.publish(susBroker, "Taquillero" + newTopic.getIdTaquillero() + "/Taquilla", clave);
+            if (taquilla != -1)
+            {
+                MQTTPublisher.publish(susBroker, "Taquillero" + newTopic.getIdTaquillero() + "/Taquilla" + taquilla + "/accion", "Autenticar");
+                
+                Logic.insertRecogidaAutenticar(newTopic.getIdTaquillero(), clave);
             }
-        } else {
-            MQTTPublisher.publish(susBroker, "test/noes", "no llega");
         }
-
     }
 
     @Override

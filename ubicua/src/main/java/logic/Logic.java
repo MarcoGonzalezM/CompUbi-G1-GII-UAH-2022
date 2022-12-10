@@ -332,10 +332,96 @@ public class Logic {
         return id;
     }
     
-    public static boolean validarClaveTaquillero(int taquillero, String clave)
+    public static int validarClaveTaquillero(int taquillero, String clave)
     {
-        boolean valido = false;
+        int taquilla = -1;
         
-        return valido;
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.getClavePedido(con);
+            
+            ps.setInt(1, taquillero);
+            
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            String pedClave;
+            while(rs.next()){
+                pedClave = rs.getString("codigo");
+                if(pedClave.equals(clave))
+                {
+                    taquilla = rs.getInt("id_taquilla_taquilla");
+                }
+            }
+            
+        }catch (SQLException ex) {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return taquilla;
+    }
+    
+    public static void insertRecogidaAutenticar(int taquillero, String clave)
+    {
+        int id_pedido = -1;
+        int id_recogido = -1;
+        String descripcion;
+        boolean recogido = false;
+        
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            //Obtenemos el id del pedido correspondiente a la clave y taquillero
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.getClavePedido(con);
+            
+            ps.setInt(1, taquillero);
+            
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            String pedClave;
+            while(rs.next()){
+                pedClave = rs.getString("codigo");
+                if(pedClave.equals(clave))
+                {
+                    id_pedido = rs.getInt("id_pedido_pedido");
+                }
+            }
+            
+            //Verificamos si hay un pedido asociado
+            if(id_pedido != -1)
+            {
+                //Buscamos el id maximo en Recogida_autenticar
+                PreparedStatement ps1 = ConectionDDBB.getMaxIdRecogida_autenticar(con);
+                ResultSet rs1 = ps.executeQuery();
+                if(rs.next())
+                {
+                    id_recogido = rs.getInt("max_id_recogida") + 1;
+                }
+                else
+                {
+                    id_recogido = 1;
+                }
+                
+                //insertamos en Recogida_autenticar
+                PreparedStatement insert = ConectionDDBB.insertRecogidaAutenticar(con);
+                
+                descripcion = "Mensaje de autenticacion del pedido" + id_pedido + "en el taquillero" + taquillero;
+                
+                ps.setInt(1, id_recogido);
+                ps.setString(2, descripcion);
+                ps.setInt(3, id_pedido);
+                ps.setBoolean(4, recogido);
+                
+                ps.executeUpdate();
+            }
+            
+        }catch (SQLException ex) {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }
