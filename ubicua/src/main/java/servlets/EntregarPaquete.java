@@ -45,10 +45,11 @@ public class EntregarPaquete extends HttpServlet {
             int id_taquilla = Integer.parseInt(taquilla);
 
             MQTTBroker bkr = new MQTTBroker();
-            
+            MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Estapaquete");
+            Thread.sleep(2000);
             if(Logic.getEstadoTaquilla(id_taquilla, id_taquillero))
             {
-                Logic.updatePedidoEstadoEntrega("recogido", id_pedido);
+                Logic.updatePedidoEstadoEntrega("entregado", id_pedido);
                 
                 MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Cerrar");
                 estado_final=1;
