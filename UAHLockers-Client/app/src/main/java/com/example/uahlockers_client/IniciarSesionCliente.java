@@ -26,13 +26,13 @@ public class IniciarSesionCliente extends AppCompatActivity {
 
         button1 = (Button) findViewById(R.id.button_ini_ses);
         button2 = (Button) findViewById(R.id.button_reg);
+        textUName = (EditText) findViewById(R.id.textUName);
+        textPwd = (EditText) findViewById(R.id.TextPwd);
+        textErrMess = (TextView) findViewById(R.id.labelErrMess);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textUName = (EditText) findViewById(R.id.textUName);
-                textPwd = (EditText) findViewById(R.id.TextPwd);
-                textErrMess = (TextView) findViewById(R.id.labelErrMess);
                 iniciarSes(textUName.getText().toString(),textPwd.getText().toString());
             }
         });
@@ -49,18 +49,17 @@ public class IniciarSesionCliente extends AppCompatActivity {
 
     public void iniciarSes(String uname, String pwd){
         int idCliente=0;
-        // TODO: Enviar datos al servidor
         byte [] pwdBytes= pwd.getBytes(StandardCharsets.UTF_8);
         String hashPwd = "";
         for (int i=0;i<pwdBytes.length;i++){
             hashPwd += (char) ~pwdBytes[i];
         }
         this.uname = uname;
+        // TODO: hash
         // this.hashPwd = hashPwd;
         this.hashPwd = pwd;
         sendLogIn();
 
-        // TODO: Recibir respuesta de validación del servidor
         switch(resultado){
             case -1:{
                 textErrMess.setText("Error: el nombre de usuario no está registrado");
@@ -74,7 +73,6 @@ public class IniciarSesionCliente extends AppCompatActivity {
                 textErrMess.setText("Error: no se pudo conectar al servidor");
                 break;
             }
-
             default: {
                 Intent i = new Intent(IniciarSesionCliente.this, MenuPrincipalCliente.class);
                 startActivity(i);

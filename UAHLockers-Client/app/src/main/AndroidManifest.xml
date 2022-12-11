@@ -31,9 +31,6 @@
             android:name=".Autentificacion">
         </activity>
         <activity
-            android:name=".ElegirTaquillero">
-        </activity>
-        <activity
             android:name=".MenuPrincipalCliente">
         </activity>
         <activity

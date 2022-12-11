@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 public class RegistroUsuario extends AppCompatActivity {
 
+    private Button button1;
     private EditText textUName, textPwd, textConfPwd;
     private TextView textErrMess;
     private String uname, pwd, hashPwd;
@@ -23,15 +24,15 @@ public class RegistroUsuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro_usuario);
 
-        Button button1 = (Button) findViewById(R.id.button);
+        button1 = (Button) findViewById(R.id.button);
+        textUName = (EditText) findViewById(R.id.TextUName);
+        textPwd = (EditText) findViewById(R.id.TextPwd);
+        textConfPwd = (EditText) findViewById(R.id.TextConfPwd);
+        textErrMess = (TextView) findViewById(R.id.labelErrMess);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textUName = (EditText) findViewById(R.id.TextUName);
-                textPwd = (EditText) findViewById(R.id.TextPwd);
-                textConfPwd = (EditText) findViewById(R.id.TextConfPwd);
-                textErrMess = (TextView) findViewById(R.id.labelErrMess);
                 registrar(textUName.getText().toString(),textPwd.getText().toString(),textConfPwd.getText().toString());
             }
         });
@@ -39,18 +40,24 @@ public class RegistroUsuario extends AppCompatActivity {
 
     public void registrar(String uname, String pwd, String confPwd){
         if (pwd.equals(confPwd)){
-            // TODO: Enviar datos al servidor
             this.uname = uname;
             this.pwd = pwd;
             sendRegistration();
+            switch(resultado){
+                case -1:{
+                    textErrMess.setText("Error: el nombre de usuario no está disponible");
+                    break;
+                }
+                case 0:{
+                    textErrMess.setText("Error: no se pudo conectar al servidor");
+                    break;
+                }
 
-            // TODO: Recibir respuesta de validación del servidor
-            readRegisterResponse();
-            if (resultado==-1){
-                textErrMess.setText("Error: nombre de usuario no disponible.");
+                default: {
+                    iniciarSes(textUName.getText().toString(),textPwd.getText().toString());
+                    finish();
+                }
             }
-            iniciarSes(textUName.getText().toString(),textPwd.getText().toString());
-            finish();
         } else {
             textErrMess.setText("Error: las contraseñas no coinciden.");
         }
@@ -58,7 +65,6 @@ public class RegistroUsuario extends AppCompatActivity {
 
     public void iniciarSes(String uname, String pwd){
         int idCliente=0;
-        // TODO: Enviar datos al servidor
         byte [] pwdBytes= pwd.getBytes(StandardCharsets.UTF_8);
         String hashPwd = "";
         for (int i=0;i<pwdBytes.length;i++){
@@ -69,8 +75,6 @@ public class RegistroUsuario extends AppCompatActivity {
         this.hashPwd = hashPwd;
         sendLogIn();
 
-        // TODO: Recibir respuesta de validación del servidor
-        readLogResponse();
         switch(resultado){
             case -1:{
                 textErrMess.setText("Error: el nombre de usuario no está registrado");
@@ -108,7 +112,7 @@ public class RegistroUsuario extends AppCompatActivity {
 
     private void sendRegistration(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/Registration";
+        urlStr+="/uahlockers/registration";
         RegistrationServerConnectionThread thread = new RegistrationServerConnectionThread(this, urlStr);
         try {
             thread.join();
@@ -119,30 +123,7 @@ public class RegistroUsuario extends AppCompatActivity {
 
     private void sendLogIn(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/LogIn";
-        RegistrationServerConnectionThread thread = new RegistrationServerConnectionThread(this, urlStr);
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void readRegisterResponse() {
-        String urlStr = "http://192.168.0.166:8080";
-        urlStr += "/uahlockers/RegisterResponse";
-        RegistrationServerConnectionThread thread = new RegistrationServerConnectionThread(this, urlStr);
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void readLogResponse() {
-        String urlStr = "http://192.168.0.166:8080";
-        urlStr += "/uahlockers/LogResponse";
+        urlStr+="/uahlockers/iniciarSesion";
         RegistrationServerConnectionThread thread = new RegistrationServerConnectionThread(this, urlStr);
         try {
             thread.join();

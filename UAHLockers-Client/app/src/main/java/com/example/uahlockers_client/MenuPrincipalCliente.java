@@ -10,18 +10,18 @@ import android.widget.Button;
 
 public class MenuPrincipalCliente extends AppCompatActivity {
 
-    int idCliente;
+    private int idCliente;
+    private Button button1, button2, button3, button4, button5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal_cliente);
 
-        Button button1 = (Button) findViewById(R.id.button_pedir_paq);
-        Button button2 = (Button) findViewById(R.id.button_mis_paq);
-        Button button3 = (Button) findViewById(R.id.button_mis_not);
-        Button button4 = (Button) findViewById(R.id.button_elgir_taq);
-        Button button5 = (Button) findViewById(R.id.button_cerr_ses);
+        button1 = (Button) findViewById(R.id.button_pedir_paq);
+        button2 = (Button) findViewById(R.id.button_mis_paq);
+        button3 = (Button) findViewById(R.id.button_mis_not);
+        button5 = (Button) findViewById(R.id.button_cerr_ses);
 
         idCliente = getIntent().getIntExtra("idCliente",0);
 
@@ -49,16 +49,6 @@ public class MenuPrincipalCliente extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MenuPrincipalCliente.this, MisNotificaciones.class);
-                startActivity(i);
-                i.putExtra("idCliente", idCliente);
-                finish();
-            }
-        });
-
-        button4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MenuPrincipalCliente.this, ElegirTaquillero.class);
                 startActivity(i);
                 i.putExtra("idCliente", idCliente);
                 finish();

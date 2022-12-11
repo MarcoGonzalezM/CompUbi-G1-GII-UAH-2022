@@ -67,17 +67,6 @@
         app:layout_constraintVertical_bias="0.721" />
 
     <Button
-        android:id="@+id/button_elgir_taq"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Elegir Taquillero"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.816" />
-
-    <Button
         android:id="@+id/button_cerr_ses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

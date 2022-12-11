@@ -1,16 +1,10 @@
 package com.example.uahlockers_client;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
 public class RegistrationServerConnectionThread extends ServerConnectionThread {
     private RegistroUsuario activity;
@@ -20,14 +14,10 @@ public class RegistrationServerConnectionThread extends ServerConnectionThread {
     public RegistrationServerConnectionThread(RegistroUsuario p_activity, String p_url) {
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/LogIn")) {
+        if (urlStr.contains("/iniciarSesion")) {
             commId = 1;
-        } else if (urlStr.contains("/LogResponse")) {
+        } else if (urlStr.contains("/registration")) {
             commId = 2;
-        } else if (urlStr.contains("/Registration")) {
-            commId = 3;
-        } else if (urlStr.contains("/RegisterResponse")) {
-            commId = 4;
         } else commId = -1;
         start();
     }
@@ -35,16 +25,10 @@ public class RegistrationServerConnectionThread extends ServerConnectionThread {
     public void run(){
         switch(commId){
             case (1):{
-                sendLogIn();
+                sendLogin();
             }
             case (2):{
-                readResponse();
-            }
-            case (3):{
                 sendRegistration();
-            }
-            case (4):{
-                readRegisterResponse();
             }
             default:{
 
@@ -52,70 +36,41 @@ public class RegistrationServerConnectionThread extends ServerConnectionThread {
         }
     }
 
-    private void sendLogIn(){
-        try {
-            String uname = activity.getUName();
-            String pwd = activity.getPwd();
-            URL url = new URL(urlStr);
-            HttpURLConnection urlConnection = null;
-            urlConnection = (HttpURLConnection) url.openConnection();
-            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-            out.write(uname.getBytes(StandardCharsets.UTF_8));
-            out.write(pwd.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void readResponse(){
+    private void sendLogin(){
         String response = "";
         int resultado = 0;
         try{
+            String uname = activity.getUName();
+            String pwd = activity.getPwd();
+            urlStr = urlStr + "?nombre="+uname+"&password="+pwd;
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             response = convertStreamToString(in);
-            JSONObject jsonObject= new JSONObject(response);
-            resultado = jsonObject.getInt("resultado");
-        } catch (IOException|JSONException e) {
+            resultado = (int) Integer.valueOf(response.substring(0,response.length()-1));
+        } catch (IOException e) {
             e.printStackTrace();
         }
         activity.setResultado(resultado);
     }
 
     private void sendRegistration(){
+        String response = "";
+        int resultado = 0;
         try {
             String uname = activity.getUName();
             String pwd = activity.getPwd();
-            URL url = new URL(urlStr);
-            HttpURLConnection urlConnection = null;
-            urlConnection = (HttpURLConnection) url.openConnection();
-            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-            out.write(uname.getBytes(StandardCharsets.UTF_8));
-            out.write(pwd.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void readRegisterResponse(){
-        String response = "";
-        int resultado = 0;
-        try{
+            urlStr = urlStr + "?nombre="+uname+"&password="+pwd;
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             response = convertStreamToString(in);
-            JSONObject jsonObject= new JSONObject(response);
-            resultado = jsonObject.getInt("resultado");
-        } catch (IOException|JSONException e) {
+            resultado = (int) Integer.valueOf(response.substring(0,response.length()-1));
+        } catch (IOException e) {
             e.printStackTrace();
         }
         activity.setResultado(resultado);
     }
-
-
-
 }

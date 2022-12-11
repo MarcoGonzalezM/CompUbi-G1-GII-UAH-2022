@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Autentificacion extends AppCompatActivity {
 
-    int idCliente,idNotificacion;
+    int idCliente,idNotificacion, resultado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class Autentificacion extends AppCompatActivity {
         buttonY.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Código del botón
+                enviarAuth(true);
                 Intent i = new Intent(Autentificacion.this, MenuPrincipalCliente.class);
                 i.putExtra("idCliente", idCliente);
                 startActivity(i);
@@ -36,7 +36,7 @@ public class Autentificacion extends AppCompatActivity {
         buttonN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Código del botón
+                enviarAuth(false);
                 Intent i = new Intent(Autentificacion.this, MenuPrincipalCliente.class);
                 i.putExtra("idCliente", idCliente);
                 startActivity(i);
@@ -44,4 +44,22 @@ public class Autentificacion extends AppCompatActivity {
             }
         });
     }
+    public void setResultado(int resultado) {
+        this.resultado = resultado;
+    }
+
+    public void enviarAuth(boolean aceptada) {
+        String urlStr = "http://192.168.0.166:8080";
+        urlStr += "/uahlockers/autentificar";
+        urlStr = urlStr + "?aceptada=";
+        if (aceptada) urlStr += "true";
+        else urlStr += "false";
+        AutentificacionServerConnectionThread thread = new AutentificacionServerConnectionThread(this, urlStr);
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

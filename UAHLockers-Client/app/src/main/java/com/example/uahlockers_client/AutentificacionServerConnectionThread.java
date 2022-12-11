@@ -6,46 +6,45 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class IniciarSesionServerConnectionThread extends ServerConnectionThread{
-    private IniciarSesionCliente activity;
+public class AutentificacionServerConnectionThread extends ServerConnectionThread {
+    private Autentificacion activity;
     private String urlStr = "";
     private int commId;
 
-    public IniciarSesionServerConnectionThread(IniciarSesionCliente p_activity, String p_url){
+    public AutentificacionServerConnectionThread(Autentificacion p_activity, String p_url) {
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/iniciarSesion")){
+        if (urlStr.contains("/autentificar")) {
             commId = 1;
-        } else commId = -1;
+        } else
+            commId = -1;
         start();
     }
 
     public void run(){
         switch(commId){
             case (1):{
-                sendLogin();
-            } default: {
+                autentificar();
+            }
+            default:{
 
             }
         }
     }
 
-    private void sendLogin(){
+    private void autentificar(){
         String response = "";
-        int resultado = 1;
-        /*try{
-            String uname = activity.getUName();
-            String pwd = activity.getPwd();
-            urlStr = urlStr + "?nombre="+uname+"&password="+pwd;
+        int resultado = 0;
+        try {
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             response = convertStreamToString(in);
-            resultado = (int) Integer.valueOf(response.substring(0,response.length()-1));
-        } catch (Exception e) {
+            resultado = Integer.valueOf(response);
+        } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
         activity.setResultado(resultado);
     }
 }
