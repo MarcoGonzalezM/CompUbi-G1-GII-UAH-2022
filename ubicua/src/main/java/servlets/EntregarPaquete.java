@@ -1,27 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package servlets;
 
-import com.google.gson.Gson;
-import database.Pedido;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import logic.Log;
 import logic.Logic;
+import mqtt.MQTTBroker;
+import mqtt.MQTTPublisher;
+
 /**
  *
  * @author mario.fernandezr
  */
-@WebServlet(name = "getPedidos", urlPatterns = {"/getPedidos"})
-public class getPedidos extends HttpServlet {
+@WebServlet(name = "EntregarPaquete", urlPatterns = {"/EntregarPaquete"})
+public class EntregarPaquete extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,16 +29,40 @@ public class getPedidos extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Log.log.info("-- Get Taquilleros list from DB--");
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int estado_final =0;
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        try {
-            ArrayList<Pedido> pedidos = Logic.getPedidosEstadoEntrega();
-            String jsonPedidos = new Gson().toJson(pedidos);
-            Log.log.info("JSON Values=> {}", jsonPedidos);
-            out.println(jsonPedidos);
-        } catch (NullPointerException e) {
+        try{
+            String pedido = request.getParameter("id_pedido");
+            int id_pedido = Integer.parseInt(pedido);
+            
+            String taquillero = request.getParameter("id_taquillero");
+            int id_taquillero = Integer.parseInt(taquillero);
+            
+            String taquilla = request.getParameter("id_taquilla");
+            int id_taquilla = Integer.parseInt(taquilla);
+
+            MQTTBroker bkr = new MQTTBroker();
+            
+            if(Logic.getEstadoTaquilla(id_taquilla, id_taquillero))
+            {
+                Logic.updatePedidoEstadoEntrega("recogido", id_pedido);
+                
+                MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Cerrar");
+                estado_final=1;
+            }
+            
+            else
+            {
+                MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Abrir");
+                estado_final=-1;
+            }
+            
+            out.print(estado_final);
+        }
+        catch (NullPointerException e) {
             out.print("-1");
             Log.log.error("Exception: {}", e);
         } catch (Exception e) {

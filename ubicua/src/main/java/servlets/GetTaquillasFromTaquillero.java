@@ -35,9 +35,10 @@ public class GetTaquillasFromTaquillero extends HttpServlet {
 		Log.log.info("-- Get Taquilleros information from DB--");
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
+                int id_taquillero = Integer.parseInt(request.getParameter("id_taquillero"));
 		try 
 		{
-			ArrayList<Taquilla> values = Logic.getTaquillasFromTaquilleroDB();
+			ArrayList<Taquilla> values = Logic.getTaquillasFromTaquilleroDB(id_taquillero);
 			String jsonStations = new Gson().toJson(values);
 			Log.log.info("JSON Values=> {}", jsonStations);
 			out.println(jsonStations);

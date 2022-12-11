@@ -103,7 +103,7 @@ public class ConectionDDBB {
     }
 
     public static PreparedStatement GetTaquillasFromTaquillero(Connection con) {
-        return getStatement(con, "SELECT id_taquilla FROM TAQUILLA WHERE id_taquillero_taquillero= ?");
+        return getStatement(con, "SELECT id_taquilla FROM TAQUILLA WHERE id_taquillero_taquillero= ? AND ocupado=?");
     }
 
     public static PreparedStatement GetTaquilleros(Connection con) {
@@ -134,7 +134,7 @@ public class ConectionDDBB {
             return getStatement(con, "INSERT INTO pedido (id_pedido, id_cliente_cliente, id_taquillero_taquillero_taquilla, estado_entrega, codigo) values (?,?,?,?,?)");
     }
     
-    public static PreparedStatement getPedidos(Connection con) {
+    public static PreparedStatement getPedidosEstadoEntrega(Connection con) {
             return getStatement(con, "SELECT id_pedido,id_cliente,id_taquillero_taquillero_taquilla FROM pedido WHERE estado_entrega=?;");
     }
     
@@ -164,5 +164,17 @@ public class ConectionDDBB {
     
     public static PreparedStatement getPedidoTaquillaTaquillero(Connection con){
         return getStatement(con, "SELECT id_taquilla_taquilla, id_taquillero_taquillero_taquilla FROM pedido where id_pedido = ?");
+    }
+    
+    public static PreparedStatement getPedidosRepartidor(Connection con) {
+            return getStatement(con, "SELECT id_pedido,id_cliente,id_taquillero_taquillero_taquilla FROM pedido WHERE id_repartidor=?;");
+    }
+    
+    public static PreparedStatement updateTaquillaPedido(Connection con){
+        return getStatement(con, "UPDATE pedido SET id_taquilla_taquilla = ? WHERE id_pedido=?;");
+    }
+    
+    public static PreparedStatement getEstadoTaquilla(Connection con){
+        return getStatement(con, "SELECT ocupado FROM taquilla WHERE id_taquillero_taquillero=? AND id_taquilla=?;");
     }
 }
