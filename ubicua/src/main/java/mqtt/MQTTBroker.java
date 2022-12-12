@@ -1,5 +1,7 @@
 package mqtt;
 
+import java.util.Date;
+
 public class MQTTBroker 
 {		
 	private static int qos = 1;
@@ -19,7 +21,7 @@ public class MQTTBroker
 	}
 
 	public static String getClientId() {
-            return clientId;
+            return (clientId + new Date().getTime());
 	}			
 }
 
