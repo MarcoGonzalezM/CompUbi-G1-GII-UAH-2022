@@ -262,6 +262,7 @@ public class Logic {
             ps.setString(4, estado_entrega);
             int clave = generarClave(taquillero);
             ps.setInt(5, clave);
+            ps.setString(6, "Producto prueba");
             Log.log.info("Query=> {}", ps.toString());
             ps.executeUpdate();
 
