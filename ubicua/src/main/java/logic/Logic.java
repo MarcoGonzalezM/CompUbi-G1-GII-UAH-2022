@@ -750,7 +750,6 @@ public class Logic {
         
     }
     
-<<<<<<< Updated upstream
     public static Pedido getDatosPedido(int id_pedido) {
         Pedido newP= new Pedido();
         ConectionDDBB conector = new ConectionDDBB();
@@ -783,7 +782,8 @@ public class Logic {
             conector.closeConnection(con);
         }
         return newP;
-=======
+    }
+    
     public static int getTaquillero(int id_pedido) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
@@ -809,6 +809,5 @@ public class Logic {
         }
 
         return taquillero;
->>>>>>> Stashed changes
     }
 }
