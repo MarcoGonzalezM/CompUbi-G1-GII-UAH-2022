@@ -193,4 +193,8 @@ public class ConectionDDBB {
     public static PreparedStatement getRecogidaNotificacionIdRecogida(Connection con){
         return getStatement(con, "SELECT id_pedido_pedido FROM recogida_autenticar WHERE id_recogida = ?");
     }
+    
+    public static PreparedStatement getTaquillero(Connection con) {
+        return getStatement(con, "SELECT id_taquillero_taquillero_taquilla FROM pedido WHERE id_pedido=?");
+    }
 }

@@ -750,6 +750,7 @@ public class Logic {
         
     }
     
+<<<<<<< Updated upstream
     public static Pedido getDatosPedido(int id_pedido) {
         Pedido newP= new Pedido();
         ConectionDDBB conector = new ConectionDDBB();
@@ -782,5 +783,32 @@ public class Logic {
             conector.closeConnection(con);
         }
         return newP;
+=======
+    public static int getTaquillero(int id_pedido) {
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+
+        int taquillero = -1;
+
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.getTaquillero(con);
+
+            ps.setInt(1, id_pedido);
+
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                taquillero = rs.getInt("id_taquillero_taquillero_taquilla");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return taquillero;
+>>>>>>> Stashed changes
     }
 }
