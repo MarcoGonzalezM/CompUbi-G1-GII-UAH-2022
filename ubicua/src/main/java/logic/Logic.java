@@ -690,4 +690,62 @@ public class Logic {
         }
         return pedidos;
     }
+    
+    public static int getRecogidaNotificacionPedido(int id_pedido)
+    {
+        int id_recogida = -1;
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+
+            PreparedStatement ps = ConectionDDBB.getRecogidaNotificacionIdPedido(con);
+            ps.setInt(1, id_pedido);
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                id_recogida = rs.getInt("id_recogida");
+            }
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+        } catch (Exception e) {
+            Log.log.error("Error:{}", e);
+        } finally {
+            conector.closeConnection(con);
+        }
+        return id_recogida;
+    }
+    
+    public static int getRecogidaNotificacionIDPedido(int id_recogida)
+    {
+        int id_pedido = -1;
+        
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+
+            PreparedStatement ps = ConectionDDBB.getRecogidaNotificacionIdRecogida(con);
+            ps.setInt(1, id_pedido);
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                id_recogida = rs.getInt("id_pedido_pedido");
+            }
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+        } catch (Exception e) {
+            Log.log.error("Error:{}", e);
+        } finally {
+            conector.closeConnection(con);
+        }
+        return id_pedido;
+        
+    }
 }

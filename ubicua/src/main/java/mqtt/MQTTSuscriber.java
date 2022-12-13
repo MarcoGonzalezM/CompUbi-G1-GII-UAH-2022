@@ -66,6 +66,7 @@ public class MQTTSuscriber implements MqttCallback {
         Log.logmqtt.debug("Suscribe to topics");
 
         try {
+            MqttClient sampleClient = new MqttClient(broker.getBroker(), MQTTBroker.getClientId(), persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             susClient.setCallback(this);
             connOpts.setCleanSession(true);

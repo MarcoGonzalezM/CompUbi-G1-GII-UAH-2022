@@ -1,5 +1,12 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package servlets;
 
+import com.google.gson.Gson;
+import database.Recogida_autenticar;
+import database.Taquillero;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -7,24 +14,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import logic.Log;
 import logic.Logic;
-
-import mqtt.MQTTBroker;
-import mqtt.MQTTPublisher;
 
 /**
  *
  * @author Italo Joel Sandoval Amoretti
  */
-@WebServlet(name = "abrirTaquilla", urlPatterns =
-{
-    "/abrirTaquilla"
-})
-public class abrirTaquilla extends HttpServlet
-{
+@WebServlet(name = "getRecogidaNotificacionPedido", urlPatterns = {"/getRecogidaNotificacionPedido"})
+public class getRecogidaNotificacionPedido extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,35 +35,16 @@ public class abrirTaquilla extends HttpServlet
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try
         {
-            int id_recogida = Integer.parseInt(request.getParameter("id_recogida"));
-            String recogido = request.getParameter("recogido");
-
-            MQTTBroker bkr = new MQTTBroker();
+            int id_pedido = Integer.parseInt(request.getParameter("id_pedido"));
             
-            int id_pedido = Logic.getRecogidaNotificacionIDPedido(id_recogida);
-            int taquillero = Logic.getTaquilleroPedido(id_pedido);
-            int taquilla = Logic.getTaquillaPedido(id_pedido);
+            Logic.getRecogidaNotificacionPedido(id_pedido);
             
-            if(recogido.equals("true"))
-            {
-                Logic.updateRecogidaAutenticar(true, id_recogida);
-                Logic.updatePedidoEstadoEntrega("recogido", id_pedido);
-                
-                MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Abrir");
-            }
-            
-            if(recogido.equals("false"))
-            {
-                MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Cerrar");
-            }
-            
-            out.print(1);
+            out.print(id_pedido);
         }
         catch (NullPointerException e) {
             out.print("-1");
@@ -88,8 +68,7 @@ public class abrirTaquilla extends HttpServlet
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -103,8 +82,7 @@ public class abrirTaquilla extends HttpServlet
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -114,8 +92,7 @@ public class abrirTaquilla extends HttpServlet
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo()
-    {
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
