@@ -123,7 +123,7 @@ public class ConectionDDBB {
     }
     
     public static PreparedStatement getClaves(Connection con) {
-        return getStatement(con, "SELECT clave FROM taquillero NATURAL JOIN taquilla NATURAL JOIN pedido WHERE taquillero.id_taquillero = ? AND (pedido.estado_entrega = ? OR pedido.estado_entrega = ?)");
+        return getStatement(con, "SELECT codigo FROM taquillero NATURAL JOIN taquilla NATURAL JOIN pedido WHERE taquillero.id_taquillero = ? AND (pedido.estado_entrega = ? OR pedido.estado_entrega = ?)");
     }
     
     public static PreparedStatement getMaxIdPedido(Connection con) {
