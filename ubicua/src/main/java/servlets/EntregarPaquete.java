@@ -3,11 +3,11 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import logic.Log;
 import logic.Logic;
 import mqtt.MQTTBroker;
@@ -17,8 +17,8 @@ import mqtt.MQTTPublisher;
  *
  * @author mario.fernandezr
  */
-@WebServlet(name = "EntregarPaquete", urlPatterns = {"/EntregarPaquete"})
-public class EntregarPaquete extends HttpServlet {
+@WebServlet(name = "entregarPaquete", urlPatterns = {"/entregarPaquete"})
+public class entregarPaquete extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,6 +47,7 @@ public class EntregarPaquete extends HttpServlet {
             MQTTBroker bkr = new MQTTBroker();
             MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Estapaquete");
             Thread.sleep(2000);
+            
             if(Logic.getEstadoTaquilla(id_taquilla, id_taquillero))
             {
                 Logic.updatePedidoEstadoEntrega("entregado", id_pedido);

@@ -19,13 +19,13 @@ import database.Taquilla;
  *
  * @author mario.fernandezr
  */
-@WebServlet(name = "GetTaquillasFromTaquillero", urlPatterns = {"/GetTaquillasFromTaquillero"})
-public class GetTaquillasFromTaquillero extends HttpServlet {
+@WebServlet(name = "getTaquillasFromTaquillero", urlPatterns = {"/getTaquillasFromTaquillero"})
+public class getTaquillasFromTaquillero extends HttpServlet {
     
     private static final long serialVersionUID = 1L;
 
 
-    public GetTaquillasFromTaquillero() 
+    public getTaquillasFromTaquillero() 
     {
         super();
     }

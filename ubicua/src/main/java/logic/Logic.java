@@ -643,12 +643,16 @@ public class Logic {
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.getEstadoTaquilla(con);
 
-            ps.setInt(1, id_taquilla);
-            ps.setInt(2, id_taquillero);
+            ps.setInt(1, id_taquillero);
+            ps.setInt(2, id_taquilla);
 
             Log.log.info("Query=> {}", ps.toString());
-            ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
+            if (rs.next()) {
+                ocupado = rs.getBoolean("ocupado");
+
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -691,9 +695,8 @@ public class Logic {
         }
         return pedidos;
     }
-    
-    public static int getRecogidaNotificacionPedido(int id_pedido)
-    {
+
+    public static int getRecogidaNotificacionPedido(int id_pedido) {
         int id_recogida = -1;
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
@@ -719,11 +722,10 @@ public class Logic {
         }
         return id_recogida;
     }
-    
-    public static int getRecogidaNotificacionIDPedido(int id_recogida)
-    {
+
+    public static int getRecogidaNotificacionIDPedido(int id_recogida) {
         int id_pedido = -1;
-        
+
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
         try {
@@ -747,11 +749,11 @@ public class Logic {
             conector.closeConnection(con);
         }
         return id_pedido;
-        
+
     }
-    
+
     public static Pedido getDatosPedido(int id_pedido) {
-        Pedido newP= new Pedido();
+        Pedido newP = new Pedido();
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
         try {
@@ -784,7 +786,7 @@ public class Logic {
         return newP;
 
     }
-    
+
     public static int getTaquillero(int id_pedido) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;

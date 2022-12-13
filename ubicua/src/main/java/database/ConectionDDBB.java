@@ -111,11 +111,11 @@ public class ConectionDDBB {
     }
 
     public static PreparedStatement UpdateOcupadoTaquilla(Connection con) {
-        return getStatement(con, "UPDATE Taquilla SET ocupado = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
+        return getStatement(con, "UPDATE taquilla SET ocupado = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
     }
 
     public static PreparedStatement UpdateEstadoTaquilla(Connection con) {
-        return getStatement(con, "UPDATE Taquilla SET estado_apertura = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
+        return getStatement(con, "UPDATE taquilla SET estado_apertura = ? where id_taquilla = ? AND id_taquillero_taquillero = ?");
     }
     
     public static PreparedStatement getRecogida_autenticar(Connection con) {
