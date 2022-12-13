@@ -749,4 +749,38 @@ public class Logic {
         return id_pedido;
         
     }
+    
+    public static Pedido getDatosPedido(int id_pedido) {
+        Pedido newP= new Pedido();
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+
+            PreparedStatement ps = ConectionDDBB.getDatosPedido(con);
+            ps.setInt(1, id_pedido);
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                newP.setId_pedido(rs.getInt("id_pedido"));
+                newP.setId_cliente(rs.getInt("id_cliente_cliente"));
+                newP.setTaquillero(rs.getInt("id_taquillero_taquillero_taquilla"));
+                newP.setCodigo(rs.getString("codigo"));
+                newP.setEstado_entrega(rs.getString("estado_entrega"));
+                newP.setTaquilla(rs.getInt("id_taquilla_taquilla"));
+                newP.setNombre_producto(rs.getString("nombre_producto"));
+
+            }
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+        } catch (Exception e) {
+            Log.log.error("Error:{}", e);
+        } finally {
+            conector.closeConnection(con);
+        }
+        return newP;
+    }
 }

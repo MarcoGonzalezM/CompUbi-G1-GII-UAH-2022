@@ -179,7 +179,11 @@ public class ConectionDDBB {
     }
     
     public static PreparedStatement getPedidosCliente(Connection con) {
-        return getStatement(con, "SELECT * FROM pedido where id_cliente_cliente=?");
+        return getStatement(con, "SELECT * FROM pedido where id_cliente_cliente=? and estado_entrega!='recogido'");
+    }
+    
+    public static PreparedStatement getDatosPedido(Connection con) {
+        return getStatement(con, "SELECT * from pedido where id_pedido=?");
     }
     
     public static PreparedStatement getRecogidaNotificacionIdPedido(Connection con){
