@@ -44,12 +44,8 @@ public class pedirPaquetePrueba extends HttpServlet {
             String taquillero = request.getParameter("taquillero");
             int id_cliente = Integer.parseInt(cliente);
             int id_taquillero = Integer.parseInt(taquillero);
-            int estado_peticion_pedido = Logic.pedirPaquetePrueba(id_cliente,id_taquillero);
-            if (estado_peticion_pedido == 1) {
-                out.print("1");
-            } else {
-                out.print("-1");
-            }
+            String estado_peticion_pedido = Logic.pedirPaquetePrueba(id_cliente,id_taquillero);
+            out.print(estado_peticion_pedido);
         } catch (NumberFormatException nfe) {
             out.println("-1");
             Log.log.error("Number Format Exception: {}", nfe);

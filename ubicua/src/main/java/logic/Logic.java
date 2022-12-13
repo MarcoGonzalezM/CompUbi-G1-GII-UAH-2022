@@ -217,9 +217,9 @@ public class Logic {
 
             PreparedStatement ps = ConectionDDBB.getRecogida_autenticar(con);
             Log.log.info("Query=> {}", ps.toString());
-            
+
             ps.setInt(1, idCliente);
-            
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Recogida_autenticar notificacion = new Recogida_autenticar();
@@ -227,7 +227,7 @@ public class Logic {
                 notificacion.setId_pedido(rs.getInt("id_pedido_pedido"));
                 notificacion.setId_recogida(rs.getInt("id_recogida"));
                 notificacion.setRecogido(rs.getBoolean("recogido"));
-                
+
                 recogidas.add(notificacion);
             }
         } catch (SQLException e) {
@@ -244,15 +244,16 @@ public class Logic {
         }
         return recogidas;
     }
-    
-    public static int pedirPaquetePrueba(int id_cliente, int taquillero){
-        int estado_final=0;
+
+    public static String pedirPaquetePrueba(int id_cliente, int taquillero) {
+        int estado_final = 0;
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
+        String estado = "ok";
         try {
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
-            int id_pedido=getMaxIdPedido()+1;
+            int id_pedido = getMaxIdPedido() + 1;
 
             PreparedStatement ps = ConectionDDBB.insertPedidoPrueba(con);
             ps.setInt(1, id_pedido);
@@ -261,27 +262,25 @@ public class Logic {
             String estado_entrega = "creado";
             ps.setString(4, estado_entrega);
             int clave = generarClave(taquillero);
-            ps.setInt(5,clave);
+            ps.setInt(5, clave);
             Log.log.info("Query=> {}", ps.toString());
-            int row = ps.executeUpdate();
-            
-            estado_final=1;
+            ps.executeUpdate();
+
         } catch (SQLException e) {
             Log.log.error("Error: {}", e);
-            estado_final = -1;
+            estado = e.toString();
         } catch (NullPointerException e) {
             Log.log.error("Error: {}", e);
-            estado_final = -1;
-        }finally {
+            estado = e.toString();
+        } finally {
             conector.closeConnection(con);
-            estado_final=-1;
         }
-        return estado_final;
+        return estado;
     }
-    
-    public static int generarClave(int taquillero){
-        ArrayList <Integer> claves = new ArrayList<Integer>();
-        int numero=0;
+
+    public static int generarClave(int taquillero) {
+        ArrayList<Integer> claves = new ArrayList<Integer>();
+        int numero = 0;
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
         try {
@@ -295,26 +294,25 @@ public class Logic {
             ps.setString(3, entregado);
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 int clave = 0;
                 clave = rs.getInt("clave");
                 claves.add(clave);
             }
             Random r = new Random();
             numero = r.nextInt(8999) + 1001;
-            while (claves.contains(numero)){
+            while (claves.contains(numero)) {
                 numero = r.nextInt(8999) + 1001;
             }
-            
-        }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
         return numero;
     }
-    
-    
-    public static int getMaxIdPedido(){
-        int id=0;
+
+    public static int getMaxIdPedido() {
+        int id = 0;
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
         try {
@@ -323,55 +321,53 @@ public class Logic {
             PreparedStatement ps = ConectionDDBB.getMaxIdPedido(con);
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (!rs.next()) {
+                id = 1;
+            } else {
                 id = rs.getInt("max_id_pedido");
             }
-            
-            
-        }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
         return id;
     }
-    
-    public static int validarClaveTaquillero(int taquillero, String clave)
-    {
+
+    public static int validarClaveTaquillero(int taquillero, String clave) {
         int taquilla = -1;
-        
+
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
         try {
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.getClavePedido(con);
-            
+
             ps.setInt(1, taquillero);
-            
+
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
             String pedClave;
-            while(rs.next()){
+            while (rs.next()) {
                 pedClave = rs.getString("codigo");
-                if(pedClave.equals(clave))
-                {
+                if (pedClave.equals(clave)) {
                     taquilla = rs.getInt("id_taquilla_taquilla");
                 }
             }
-            
-        }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return taquilla;
     }
-    
-    public static void insertRecogidaAutenticar(int taquillero, String clave)
-    {
+
+    public static void insertRecogidaAutenticar(int taquillero, String clave) {
         int id_pedido = -1;
         int id_recogido = -1;
         String descripcion;
         boolean recogido = false;
-        
+
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
         try {
@@ -379,162 +375,145 @@ public class Logic {
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.getClavePedido(con);
-            
+
             ps.setInt(1, taquillero);
-            
+
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
             String pedClave;
-            while(rs.next()){
+            while (rs.next()) {
                 pedClave = rs.getString("codigo");
-                if(pedClave.equals(clave))
-                {
+                if (pedClave.equals(clave)) {
                     id_pedido = rs.getInt("id_pedido_pedido");
                 }
             }
-            
+
             //Verificamos si hay un pedido asociado
-            if(id_pedido != -1)
-            {
+            if (id_pedido != -1) {
                 //Buscamos el id maximo en Recogida_autenticar
                 PreparedStatement ps1 = ConectionDDBB.getMaxIdRecogida_autenticar(con);
                 ResultSet rs1 = ps.executeQuery();
-                if(rs.next())
-                {
+                if (rs.next()) {
                     id_recogido = rs.getInt("max_id_recogida") + 1;
-                }
-                else
-                {
+                } else {
                     id_recogido = 1;
                 }
-                
+
                 //insertamos en Recogida_autenticar
                 PreparedStatement insert = ConectionDDBB.insertRecogidaAutenticar(con);
-                
+
                 descripcion = "Mensaje de autenticacion del pedido" + id_pedido + "en el taquillero" + taquillero;
-                
+
                 ps.setInt(1, id_recogido);
                 ps.setString(2, descripcion);
                 ps.setInt(3, id_pedido);
                 ps.setBoolean(4, recogido);
-                
+
                 ps.executeUpdate();
             }
-            
-        }
-        catch (SQLException ex)
-        {
+
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static void updateRecogidaAutenticar(boolean recogido, int id_recogida)
-    {
+
+    public static void updateRecogidaAutenticar(boolean recogido, int id_recogida) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
-        
+
         try {
             //Obtenemos el id del pedido correspondiente a la clave y taquillero
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.updateRecogidaAutenticar(con);
-            
+
             ps.setBoolean(1, recogido);
             ps.setInt(2, id_recogida);
-            
+
             Log.log.info("Query=> {}", ps.toString());
             ps.executeUpdate();
 
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static void updatePedidoEstadoEntrega(String estado_entrega, int id_pedido)
-    {
+
+    public static void updatePedidoEstadoEntrega(String estado_entrega, int id_pedido) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
-        
+
         try {
             //Obtenemos el id del pedido correspondiente a la clave y taquillero
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.updatePedidoEstadoEntrega(con);
-            
+
             ps.setString(1, estado_entrega);
             ps.setInt(2, id_pedido);
-            
+
             Log.log.info("Query=> {}", ps.toString());
             ps.executeUpdate();
 
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static int getTaquillaPedido(int id_pedido)
-    {
+
+    public static int getTaquillaPedido(int id_pedido) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
-        
+
         int taquilla = -1;
-        
+
         try {
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.getPedidoTaquillaTaquillero(con);
-            
+
             ps.setInt(1, id_pedido);
-            
+
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next())
-            {
+            if (rs.next()) {
                 taquilla = rs.getInt("id_taquilla_taquilla");
             }
-            
-        }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return taquilla;
     }
-    
-    public static int getTaquilleroPedido(int id_pedido)
-    {
+
+    public static int getTaquilleroPedido(int id_pedido) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
-        
+
         int taquillero = -1;
-        
+
         try {
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.getPedidoTaquillaTaquillero(con);
-            
+
             ps.setInt(1, id_pedido);
-            
+
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next())
-            {
+            if (rs.next()) {
                 taquillero = rs.getInt("id_taquillero_taquillero_taquilla");
             }
-            
-        }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return taquillero;
     }
-    
-    public static ArrayList<Pedido> getPedidosEstadoEntrega(){
+
+    public static ArrayList<Pedido> getPedidosEstadoEntrega() {
         ArrayList<Pedido> pedidos = new ArrayList<>();
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
@@ -566,9 +545,9 @@ public class Logic {
         }
         return pedidos;
     }
-    
-    public static int asignarPedidoaRepartidor(int id_pedido, int id_repartidor){
-        int estado_final=0;
+
+    public static int asignarPedidoaRepartidor(int id_pedido, int id_repartidor) {
+        int estado_final = 0;
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
         try {
@@ -581,11 +560,10 @@ public class Logic {
             ps.setInt(3, id_pedido);
             Log.log.info("Query=> {}", ps.toString());
             int row = ps.executeUpdate();
-            if (row==1){
-                estado_final=1;
-            }
-            else{
-                estado_final=-1;
+            if (row == 1) {
+                estado_final = 1;
+            } else {
+                estado_final = -1;
             }
         } catch (SQLException e) {
             Log.log.error("Error: {}", e);
@@ -598,8 +576,8 @@ public class Logic {
         }
         return estado_final;
     }
-    
-    public static ArrayList<Pedido> getPedidosRepartidor(int id_repartidor){
+
+    public static ArrayList<Pedido> getPedidosRepartidor(int id_repartidor) {
         ArrayList<Pedido> pedidos = new ArrayList<>();
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
@@ -631,55 +609,49 @@ public class Logic {
         }
         return pedidos;
     }
-    
-    public static void updateTaquillaPedido(String id_taquilla, int id_pedido)
-    {
+
+    public static void updateTaquillaPedido(String id_taquilla, int id_pedido) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
-        
+
         try {
             //Obtenemos el id del pedido correspondiente a la clave y taquillero
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.updateTaquillaPedido(con);
-            
+
             ps.setString(1, id_taquilla);
             ps.setInt(2, id_pedido);
-            
+
             Log.log.info("Query=> {}", ps.toString());
             ps.executeUpdate();
 
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static boolean getEstadoTaquilla(int id_taquilla, int id_taquillero)
-    {
+
+    public static boolean getEstadoTaquilla(int id_taquilla, int id_taquillero) {
         boolean ocupado = false;
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
-        
+
         try {
             //Obtenemos el id del pedido correspondiente a la clave y taquillero
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.getEstadoTaquilla(con);
-            
+
             ps.setInt(1, id_taquilla);
             ps.setInt(2, id_taquillero);
-            
+
             Log.log.info("Query=> {}", ps.toString());
             ps.executeQuery();
 
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ocupado;
     }
-    
+
 }
