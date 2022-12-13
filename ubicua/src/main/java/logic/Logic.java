@@ -245,11 +245,10 @@ public class Logic {
         return recogidas;
     }
 
-    public static String pedirPaquetePrueba(int id_cliente, int taquillero) {
-        int estado_final = 0;
+    public static int pedirPaquetePrueba(int id_cliente, int taquillero) {
+        int estado_final = -1;
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
-        String estado = "ok";
         try {
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
@@ -265,17 +264,18 @@ public class Logic {
             ps.setInt(5, clave);
             Log.log.info("Query=> {}", ps.toString());
             ps.executeUpdate();
-
+            
+            estado_final = 1;
         } catch (SQLException e) {
             Log.log.error("Error: {}", e);
-            estado = e.toString();
+            estado_final = -1;
         } catch (NullPointerException e) {
             Log.log.error("Error: {}", e);
-            estado = e.toString();
+            estado_final = -1;
         } finally {
             conector.closeConnection(con);
         }
-        return estado;
+        return estado_final;
     }
 
     public static int generarClave(int taquillero) {
