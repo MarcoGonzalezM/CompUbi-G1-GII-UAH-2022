@@ -782,6 +782,7 @@ public class Logic {
             conector.closeConnection(con);
         }
         return newP;
+
     }
     
     public static int getTaquillero(int id_pedido) {
