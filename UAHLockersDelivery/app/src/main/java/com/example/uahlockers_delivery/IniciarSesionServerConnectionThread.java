@@ -1,20 +1,20 @@
-package com.example.uahlockers_client;
+package com.example.uahlockers_delivery;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class IniciarSesionServerConnectionThread extends ServerConnectionThread{
-    private IniciarSesionCliente activity;
+
+    private IniciarSesionRepartidor activity;
     private String urlStr = "";
     private int commId;
 
-    public IniciarSesionServerConnectionThread(IniciarSesionCliente p_activity, String p_url){
+    public IniciarSesionServerConnectionThread(IniciarSesionRepartidor p_activity, String p_url){
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/iniciarSesion")){
+        if (urlStr.contains("/iniciarSesionRepartidor")){
             commId = 1;
         } else commId = -1;
         start();

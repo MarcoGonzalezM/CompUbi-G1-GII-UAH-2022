@@ -9,11 +9,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class IniciarSesionRepartidor extends AppCompatActivity {
+import java.nio.charset.StandardCharsets;
 
-    private Button button1, button2;
+public class IniciarSesionRepartidor extends AppCompatActivity{
+    private Button button1;
     private EditText textUName, textPwd;
     private TextView textErrMess;
+    private String uname, hashPwd;
+    private int resultado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +24,13 @@ public class IniciarSesionRepartidor extends AppCompatActivity {
         setContentView(R.layout.activity_iniciar_sesion_repartidor);
 
         button1 = (Button) findViewById(R.id.button_ini_ses);
+        textUName = (EditText) findViewById(R.id.textUName);
+        textPwd = (EditText) findViewById(R.id.TextPwd);
+        textErrMess = (TextView) findViewById(R.id.labelErrMess);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textUName = (EditText) findViewById(R.id.textUName);
-                textPwd = (EditText) findViewById(R.id.TextPwd);
-                textErrMess = (TextView) findViewById(R.id.labelErrMess);
                 iniciarSes(textUName.getText().toString(),textPwd.getText().toString());
             }
         });
@@ -35,9 +38,17 @@ public class IniciarSesionRepartidor extends AppCompatActivity {
 
     public void iniciarSes(String uname, String pwd){
         int idRepartidor=0;
-        // TODO: Enviar datos al servidor
+        byte [] pwdBytes= pwd.getBytes(StandardCharsets.UTF_8);
+        String hashPwd = "";
+        for (int i=0;i<pwdBytes.length;i++){
+            hashPwd += (char) ~pwdBytes[i];
+        }
+        this.uname = uname;
+        // TODO: hash
+        // this.hashPwd = hashPwd;
+        this.hashPwd = pwd;
+        sendLogIn();
 
-        // TODO: Recibir respuesta de validación del servidor
         int resultado = 0;
         switch(resultado){
             case -1:{
@@ -54,6 +65,28 @@ public class IniciarSesionRepartidor extends AppCompatActivity {
                 i.putExtra("idRepartidor", idRepartidor);
                 finish();
             }
+        }
+    }
+    public String getUName(){
+        return this.uname;
+    }
+
+    public String getPwd(){
+        return this.hashPwd;
+    }
+
+    public void setResultado(int resultado){
+        this.resultado = resultado;
+    }
+
+    private void sendLogIn(){
+        String urlStr = "http://192.168.0.166:8080";
+        urlStr+="/uahlockers/iniciarSesionRepartidor";
+        IniciarSesionServerConnectionThread thread = new IniciarSesionServerConnectionThread(this, urlStr);
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
