@@ -42,9 +42,9 @@ public class getRecogidaNotificacionPedido extends HttpServlet {
         {
             int id_pedido = Integer.parseInt(request.getParameter("id_pedido"));
             
-            Logic.getRecogidaNotificacionPedido(id_pedido);
+            int id_recogida = Logic.getRecogidaNotificacionPedido(id_pedido);
             
-            out.print(id_pedido);
+            out.print(id_recogida);
         }
         catch (NullPointerException e) {
             out.print("-1");
