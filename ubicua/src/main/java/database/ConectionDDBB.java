@@ -119,7 +119,7 @@ public class ConectionDDBB {
     }
     
     public static PreparedStatement getRecogida_autenticar(Connection con) {
-        return getStatement(con, "select id_recogida,descripcion,id_pedido_pedido,recogido,id_cliente_cliente from recogida_autenticar inner join pedido ON pedido.id_pedido = recogida_autenticar.id_pedido_pedido where (pedido.id_cliente_cliente = ?)");
+        return getStatement(con, "select id_recogida,descripcion,id_pedido_pedido,recogido,id_cliente_cliente from recogida_autenticar inner join pedido ON pedido.id_pedido = recogida_autenticar.id_pedido_pedido where (pedido.id_cliente_cliente = ? and recogida_autenticar.recogido = False)");
     }
     
     public static PreparedStatement getClaves(Connection con) {
