@@ -264,7 +264,7 @@ public class Logic {
             ps.setInt(5, clave);
             Log.log.info("Query=> {}", ps.toString());
             ps.executeUpdate();
-            
+
             estado_final = 1;
         } catch (SQLException e) {
             Log.log.error("Error: {}", e);
@@ -529,7 +529,7 @@ public class Logic {
                 Pedido pedido = new Pedido();
 
                 pedido.setId_pedido(rs.getInt("id_pedido"));
-                pedido.setCliente(rs.getString("id_cliente"));
+                pedido.setId_cliente(rs.getInt("id_cliente"));
                 pedido.setTaquillero(rs.getInt("id_taquillero_taquillero_taquilla"));
 
                 pedidos.add(pedido);
@@ -593,7 +593,7 @@ public class Logic {
                 Pedido pedido = new Pedido();
 
                 pedido.setId_pedido(rs.getInt("id_pedido"));
-                pedido.setCliente(rs.getString("id_cliente"));
+                pedido.setId_cliente(rs.getInt("id_cliente"));
                 pedido.setTaquillero(rs.getInt("id_taquillero_taquillero_taquilla"));
 
                 pedidos.add(pedido);
@@ -654,4 +654,40 @@ public class Logic {
         return ocupado;
     }
 
+    public static ArrayList<Pedido> getPedidosCliente(int id_cliente) {
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+        try {
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+
+            PreparedStatement ps = ConectionDDBB.getPedidosCliente(con);
+            ps.setInt(1, id_cliente);
+            Log.log.info("Query=> {}", ps.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Pedido pedido = new Pedido();
+
+                pedido.setId_pedido(rs.getInt("id_pedido"));
+                pedido.setId_cliente(rs.getInt("id_cliente_cliente"));
+                pedido.setTaquillero(rs.getInt("id_taquillero_taquillero_taquilla"));
+                pedido.setCodigo(rs.getString("codigo"));
+                pedido.setEstado_entrega(rs.getString("estado_entrega"));
+                pedido.setTaquilla(rs.getInt("id_taquilla_taquilla"));
+                pedido.setNombre_producto(rs.getString("nombre_producto"));
+
+                pedidos.add(pedido);
+            }
+        } catch (SQLException e) {
+            Log.log.error("Error: {}", e);
+        } catch (NullPointerException e) {
+            Log.log.error("Error: {}", e);
+        } catch (Exception e) {
+            Log.log.error("Error:{}", e);
+        } finally {
+            conector.closeConnection(con);
+        }
+        return pedidos;
+    }
 }
