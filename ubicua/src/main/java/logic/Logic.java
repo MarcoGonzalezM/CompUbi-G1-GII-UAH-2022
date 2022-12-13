@@ -748,7 +748,7 @@ public class Logic {
         } finally {
             conector.closeConnection(con);
         }
-        return id_pedido;
+        return id_recogida;
 
     }
 

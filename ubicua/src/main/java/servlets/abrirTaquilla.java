@@ -50,12 +50,10 @@ public class abrirTaquilla extends HttpServlet
             int id_pedido = Logic.getRecogidaNotificacionIDPedido(id_recogida);
             int taquillero = Logic.getTaquilleroPedido(id_pedido);
             int taquilla = Logic.getTaquillaPedido(id_pedido);
-            
             if(recogido.equals("true"))
             {
                 Logic.updateRecogidaAutenticar(true, id_recogida);
                 Logic.updatePedidoEstadoEntrega("recogido", id_pedido);
-                
                 MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Abrir");
             }
             
@@ -63,8 +61,6 @@ public class abrirTaquilla extends HttpServlet
             {
                 MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Cerrar");
             }
-            
-            out.print(1);
         }
         catch (NullPointerException e) {
             out.print("-1");
