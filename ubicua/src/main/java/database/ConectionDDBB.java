@@ -139,7 +139,7 @@ public class ConectionDDBB {
     }
     
     public static PreparedStatement UpdatePedido(Connection con) {
-        return getStatement(con, "UPDATE pedido SET estado = ?, id_repartidor=? where id_pedido = ?");
+        return getStatement(con, "UPDATE pedido SET estado_entrega = ?, id_cliente_repartidor=? where id_pedido = ?");
     }
     
     public static PreparedStatement getClavePedido(Connection con){
