@@ -385,7 +385,7 @@ public class Logic {
             while (rs.next()) {
                 pedClave = rs.getString("codigo");
                 if (pedClave.equals(clave)) {
-                    id_pedido = rs.getInt("id_pedido_pedido");
+                    id_pedido = rs.getInt("id_pedido");
                 }
             }
 
@@ -393,9 +393,9 @@ public class Logic {
             if (id_pedido != -1) {
                 //Buscamos el id maximo en Recogida_autenticar
                 PreparedStatement ps1 = ConectionDDBB.getMaxIdRecogida_autenticar(con);
-                ResultSet rs1 = ps.executeQuery();
+                ResultSet rs1 = ps1.executeQuery();
                 if (rs.next()) {
-                    id_recogido = rs.getInt("max_id_recogida") + 1;
+                    id_recogido = rs1.getInt("max_id_recogida") + 1;
                 } else {
                     id_recogido = 1;
                 }
@@ -403,16 +403,15 @@ public class Logic {
                 //insertamos en Recogida_autenticar
                 PreparedStatement insert = ConectionDDBB.insertRecogidaAutenticar(con);
 
-                descripcion = "Mensaje de autenticacion del pedido" + id_pedido + "en el taquillero" + taquillero;
+                descripcion = "Mensaje de autenticacion del pedido " + id_pedido + " en el taquillero " + taquillero;
 
-                ps.setInt(1, id_recogido);
-                ps.setString(2, descripcion);
-                ps.setInt(3, id_pedido);
-                ps.setBoolean(4, recogido);
+                insert.setInt(1, id_recogido);
+                insert.setString(2, descripcion);
+                insert.setInt(3, id_pedido);
+                insert.setBoolean(4, recogido);
 
-                ps.executeUpdate();
+                insert.executeUpdate();
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
         }

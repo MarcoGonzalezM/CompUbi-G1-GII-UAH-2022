@@ -40,7 +40,7 @@ public class asignarPedidoRepartidor extends HttpServlet {
             String pedido = request.getParameter("id_pedido");
             int id_repartidor = Integer.parseInt(repartidor);
             int id_pedido = Integer.parseInt(pedido);
-            int estado_asignar_paquete = Logic.asignarPedidoaRepartidor(id_repartidor,id_pedido);
+            int estado_asignar_paquete = Logic.asignarPedidoaRepartidor(id_pedido,id_repartidor);
             if (estado_asignar_paquete == 1) {
                 out.print("1");
             } else {

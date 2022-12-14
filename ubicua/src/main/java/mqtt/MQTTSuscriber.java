@@ -26,7 +26,7 @@ public class MQTTSuscriber implements MqttCallback {
 
     public MQTTSuscriber(MQTTBroker broker) {
         try {
-            
+
             this.susBroker = broker;
             this.susClient = new MqttClient(MQTTBroker.getBroker(), MQTTBroker.getClientId(), persistence);
         } catch (MqttException e) {
@@ -70,7 +70,7 @@ public class MQTTSuscriber implements MqttCallback {
             MqttConnectOptions connOpts = new MqttConnectOptions();
             susClient.setCallback(this);
             connOpts.setCleanSession(true);
-            
+
             Log.logmqtt.debug("Mqtt Connecting to broker: " + MQTTBroker.getBroker());
             susClient.connect(connOpts);
             Log.logmqtt.debug("Mqtt Connected");
@@ -132,10 +132,9 @@ public class MQTTSuscriber implements MqttCallback {
             String clave = newTopic.getValue();
             int taquilla = Logic.validarClaveTaquillero(newTopic.getIdTaquillero(), clave);
 
-            if (taquilla != -1)
-            {
+            if (taquilla != -1) {
                 MQTTPublisher.publish(susBroker, "Taquillero" + newTopic.getIdTaquillero() + "/Taquilla" + taquilla + "/accion", "Autenticar");
-                
+
                 Logic.insertRecogidaAutenticar(newTopic.getIdTaquillero(), clave);
             }
         }
