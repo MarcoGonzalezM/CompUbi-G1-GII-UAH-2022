@@ -13,10 +13,7 @@ import logic.Logic;
 import mqtt.MQTTBroker;
 import mqtt.MQTTPublisher;
 
-/**
- *
- * @author mario.fernandezr
- */
+
 @WebServlet(name = "entregarPaquete", urlPatterns = {"/entregarPaquete"})
 public class entregarPaquete extends HttpServlet {
 

@@ -15,10 +15,7 @@ import logic.Logic;
 import com.google.gson.Gson;
 import database.Taquilla;
 
-/**
- *
- * @author mario.fernandezr
- */
+
 @WebServlet(name = "getTaquillasFromTaquillero", urlPatterns = {"/getTaquillasFromTaquillero"})
 public class getTaquillasFromTaquillero extends HttpServlet {
     
