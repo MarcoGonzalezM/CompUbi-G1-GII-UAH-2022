@@ -60,7 +60,7 @@ const int usEcho1 = 32;
 const int numTaquillas = 1;
 
 //IDENTIFICADOR TAQUILLERO
-const int idTaquillero = 1;
+const int idTaquillero = 0;
 String nombreTaquillero = "Taquillero" + String(idTaquillero);
 
 //Sensores Ultrasonido
