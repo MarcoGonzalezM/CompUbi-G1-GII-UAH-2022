@@ -873,12 +873,12 @@ public class Logic {
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
-                id_cliente = getMaxIdCliente()+1;
+                id_cliente = getMaxIdCliente();
                 PreparedStatement ps1 = ConectionDDBB.registrarCliente(con);
 
                 ps1.setInt(1, id_cliente);
-                ps1.setString(2, password);
-                ps1.setString(3, nombre);
+                ps1.setString(2, nombre);
+                ps1.setString(3, password);
                 
                 ps1.executeUpdate();
                 

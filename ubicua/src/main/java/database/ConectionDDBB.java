@@ -211,6 +211,6 @@ public class ConectionDDBB {
     }
     
     public static PreparedStatement registrarCliente(Connection con) {
-            return getStatement(con, "INSERT INTO cliente values (?,?,?)");
+            return getStatement(con, "INSERT INTO cliente(id_cliente, nombre, password) values (?,?,?)");
     }
 }
