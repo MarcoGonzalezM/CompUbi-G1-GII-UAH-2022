@@ -17,8 +17,8 @@ import mqtt.MQTTPublisher;
  *
  * @author mario.fernandezr
  */
-@WebServlet(name = "EntregarPaquete", urlPatterns = {"/EntregarPaquete"})
-public class EntregarPaquete extends HttpServlet {
+@WebServlet(name = "entregarPaquete", urlPatterns = {"/entregarPaquete"})
+public class entregarPaquete extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
