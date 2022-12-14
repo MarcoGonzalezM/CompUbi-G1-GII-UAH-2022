@@ -256,13 +256,13 @@ public class Logic {
 
             PreparedStatement ps = ConectionDDBB.insertPedidoPrueba(con);
             ps.setInt(1, id_pedido);
-            ps.setInt(2, id_cliente);
-            ps.setInt(3, taquillero);
             String estado_entrega = "creado";
-            ps.setString(4, estado_entrega);
+            ps.setString(2, estado_entrega);
+            ps.setInt(3, 0);
             int clave = generarClave(taquillero);
-            ps.setInt(5, clave);
-            ps.setString(6, "Producto prueba");
+            ps.setInt(4, clave);
+            ps.setInt(5, taquillero);
+            ps.setInt(6, id_cliente);
             Log.log.info("Query=> {}", ps.toString());
             ps.executeUpdate();
 

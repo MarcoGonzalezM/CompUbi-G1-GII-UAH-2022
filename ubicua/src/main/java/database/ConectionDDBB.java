@@ -131,7 +131,7 @@ public class ConectionDDBB {
     }
     
     public static PreparedStatement insertPedidoPrueba(Connection con) {
-            return getStatement(con, "INSERT INTO pedido (id_pedido, id_cliente_cliente, id_taquillero_taquillero_taquilla, estado_entrega, codigo, nombre_producto) values (?,?,?,?,?,?)");
+            return getStatement(con, "INSERT INTO pedido values (?,?,?,?,NULL,?,NULL,?)");
     }
     
     public static PreparedStatement getPedidosEstadoEntrega(Connection con) {
