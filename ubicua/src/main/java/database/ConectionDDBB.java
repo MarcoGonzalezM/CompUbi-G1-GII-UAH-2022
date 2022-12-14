@@ -103,7 +103,7 @@ public class ConectionDDBB {
     }
 
     public static PreparedStatement GetTaquillasFromTaquillero(Connection con) {
-        return getStatement(con, "SELECT * FROM TAQUILLA WHERE id_taquillero_taquillero= ? AND ocupado=?");
+        return getStatement(con, "SELECT * FROM TAQUILLA WHERE id_taquillero_taquillero= ? AND estado_apertura=0");
     }
 
     public static PreparedStatement GetTaquilleros(Connection con) {
@@ -136,10 +136,6 @@ public class ConectionDDBB {
     
     public static PreparedStatement getPedidosEstadoEntrega(Connection con) {
             return getStatement(con, "SELECT id_pedido,id_cliente_cliente,id_taquillero_taquillero_taquilla FROM pedido WHERE estado_entrega=?;");
-    }
-    
-    public static PreparedStatement UpdatePedido(Connection con) {
-        return getStatement(con, "UPDATE pedido SET estado_entrega = ?, id_cliente_repartidor=? where id_pedido = ?");
     }
     
     public static PreparedStatement getClavePedido(Connection con){

@@ -19,6 +19,8 @@ import java.sql.ResultSet;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mqtt.MQTTBroker;
+import mqtt.MQTTPublisher;
 
 public class Logic {
 
@@ -92,7 +94,6 @@ public class Logic {
 
             PreparedStatement ps = ConectionDDBB.GetTaquillasFromTaquillero(con);
             ps.setInt(1, taquillero);
-            ps.setBoolean(2, false);
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -402,7 +403,7 @@ public class Logic {
                 //Buscamos el id maximo en Recogida_autenticar
                 PreparedStatement ps1 = ConectionDDBB.getMaxIdRecogida_autenticar(con);
                 ResultSet rs1 = ps1.executeQuery();
-                if (rs.next()) {
+                if (rs1.next()) {
                     id_recogido = rs1.getInt("max_id_recogida") + 1;
                 } else {
                     id_recogido = 1;
@@ -562,37 +563,6 @@ public class Logic {
             conector.closeConnection(con);
         }
         return pedidos;
-    }
-
-    public static int asignarPedidoaRepartidor(int id_pedido, int id_repartidor) {
-        int estado_final = 0;
-        ConectionDDBB conector = new ConectionDDBB();
-        Connection con = null;
-        try {
-            con = conector.obtainConnection(true);
-            Log.log.debug("Database Connected");
-
-            PreparedStatement ps = ConectionDDBB.UpdatePedido(con);
-            ps.setString(1, "en reparto");
-            ps.setInt(2, id_repartidor);
-            ps.setInt(3, id_pedido);
-            Log.log.info("Query=> {}", ps.toString());
-            int row = ps.executeUpdate();
-            if (row == 1) {
-                estado_final = 1;
-            } else {
-                estado_final = -1;
-            }
-        } catch (SQLException e) {
-            Log.log.error("Error: {}", e);
-        } catch (NullPointerException e) {
-            Log.log.error("Error: {}", e);
-        } catch (Exception e) {
-            Log.log.error("Error:{}", e);
-        } finally {
-            conector.closeConnection(con);
-        }
-        return estado_final;
     }
 
     public static ArrayList<Pedido> getPedidosRepartidor(int id_repartidor) {

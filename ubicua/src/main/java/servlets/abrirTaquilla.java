@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.nio.charset.StandardCharsets;
 import logic.Log;
 import logic.Logic;
 
@@ -19,12 +18,11 @@ import mqtt.MQTTPublisher;
  *
  * @author Italo Joel Sandoval Amoretti
  */
-@WebServlet(name = "abrirTaquilla", urlPatterns =
-{
-    "/abrirTaquilla"
-})
-public class abrirTaquilla extends HttpServlet
-{
+@WebServlet(name = "abrirTaquilla", urlPatterns
+        = {
+            "/abrirTaquilla"
+        })
+public class abrirTaquilla extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,33 +34,28 @@ public class abrirTaquilla extends HttpServlet
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        try
-        {
+        try {
             int id_recogida = Integer.parseInt(request.getParameter("id_recogida"));
             String recogido = request.getParameter("recogido");
 
             MQTTBroker bkr = new MQTTBroker();
-            
+
             int id_pedido = Logic.getRecogidaNotificacionIDPedido(id_recogida);
             int taquillero = Logic.getTaquilleroPedido(id_pedido);
             int taquilla = Logic.getTaquillaPedido(id_pedido);
-            if(recogido.equals("true"))
-            {
+            if (recogido.equals("true")) {
                 Logic.updateRecogidaAutenticar(true, id_recogida);
                 Logic.updatePedidoEstadoEntrega("recogido", id_pedido);
                 MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Abrir");
             }
-            
-            if(recogido.equals("false"))
-            {
+
+            if (recogido.equals("false")) {
                 MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Cerrar");
             }
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             out.print("-1");
             Log.log.error("Exception: {}", e);
         } catch (Exception e) {
@@ -84,8 +77,7 @@ public class abrirTaquilla extends HttpServlet
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -99,8 +91,7 @@ public class abrirTaquilla extends HttpServlet
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -110,8 +101,7 @@ public class abrirTaquilla extends HttpServlet
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo()
-    {
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
