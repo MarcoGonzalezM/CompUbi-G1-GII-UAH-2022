@@ -97,7 +97,9 @@ public class Logic {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Taquilla taquilla = new Taquilla();
-                taquilla.setId_taquillero(rs.getInt("id_taquilla"));
+                taquilla.setId_taquillero(rs.getInt("id_taquillero_taquillero"));
+                taquilla.setEstado_apertura(rs.getInt("estado_apertura"));
+                taquilla.setId_taquilla(rs.getInt("id_taquilla"));
                 taquillas.add(taquilla);
             }
         } catch (SQLException e) {

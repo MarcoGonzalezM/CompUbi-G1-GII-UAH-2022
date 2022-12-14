@@ -5,11 +5,13 @@ public class Taquilla {
     private int id_taquilla;
     private int id_taquillero;
     private boolean ocupado;
+    private int estado_apertura;
 
     public Taquilla(int id_taquilla, int id_taquillero, boolean ocupado) {
         this.id_taquilla = id_taquilla;
         this.id_taquillero = id_taquillero;
         this.ocupado = ocupado;
+        this.estado_apertura = 0;
     }
     
     public Taquilla() {
@@ -40,6 +42,14 @@ public class Taquilla {
 
     public void setOcupado(boolean ocupado) {
         this.ocupado = ocupado;
+    }
+
+    public int getEstado_apertura() {
+        return estado_apertura;
+    }
+
+    public void setEstado_apertura(int estado_apertura) {
+        this.estado_apertura = estado_apertura;
     }
     
 }

@@ -103,7 +103,7 @@ public class ConectionDDBB {
     }
 
     public static PreparedStatement GetTaquillasFromTaquillero(Connection con) {
-        return getStatement(con, "SELECT id_taquilla FROM TAQUILLA WHERE id_taquillero_taquillero= ? AND ocupado=?");
+        return getStatement(con, "SELECT * FROM TAQUILLA WHERE id_taquillero_taquillero= ? AND ocupado=?");
     }
 
     public static PreparedStatement GetTaquilleros(Connection con) {
