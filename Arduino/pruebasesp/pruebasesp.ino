@@ -147,7 +147,7 @@ void callback(char* topic, byte* message, unsigned int length)
       if(msgTemp == "Autenticar")
       {
         taquillas[i].autenticar();
-        client.publish(buff, "Cerrado");
+        client.publish(buff, "Autenticando");
       }
       if(msgTemp == "Estapaquete")
       {
