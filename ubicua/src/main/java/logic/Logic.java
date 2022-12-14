@@ -610,7 +610,7 @@ public class Logic {
         return pedidos;
     }
 
-    public static void updateTaquillaPedido(String id_taquilla, int id_pedido) {
+    public static void updateTaquillaPedido(int id_taquilla, int id_pedido) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
 
@@ -620,7 +620,7 @@ public class Logic {
             Log.log.debug("Database Connected");
             PreparedStatement ps = ConectionDDBB.updateTaquillaPedido(con);
 
-            ps.setString(1, id_taquilla);
+            ps.setInt(1, id_taquilla);
             ps.setInt(2, id_pedido);
 
             Log.log.info("Query=> {}", ps.toString());
@@ -811,5 +811,26 @@ public class Logic {
         }
 
         return taquillero;
+    }
+    
+    public static void updateRepartidor(int id_repartidor, int id_pedido) {
+        ConectionDDBB conector = new ConectionDDBB();
+        Connection con = null;
+
+        try {
+            //Obtenemos el id del pedido correspondiente a la clave y taquillero
+            con = conector.obtainConnection(true);
+            Log.log.debug("Database Connected");
+            PreparedStatement ps = ConectionDDBB.updateRepartidor(con);
+
+            ps.setInt(1, id_repartidor);
+            ps.setInt(2, id_pedido);
+
+            Log.log.info("Query=> {}", ps.toString());
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

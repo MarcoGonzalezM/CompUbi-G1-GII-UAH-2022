@@ -197,4 +197,8 @@ public class ConectionDDBB {
     public static PreparedStatement getTaquillero(Connection con) {
         return getStatement(con, "SELECT id_taquillero_taquillero_taquilla FROM pedido WHERE id_pedido=?");
     }
+    
+    public static PreparedStatement updateRepartidor(Connection con){
+        return getStatement(con, "UPDATE pedido SET id_repartidor = ? WHERE id_pedido=?;");
+    }
 }

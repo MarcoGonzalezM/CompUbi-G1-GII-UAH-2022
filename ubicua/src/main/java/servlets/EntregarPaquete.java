@@ -17,8 +17,8 @@ import mqtt.MQTTPublisher;
  *
  * @author mario.fernandezr
  */
-@WebServlet(name = "entregarPaquete", urlPatterns = {"/entregarPaquete"})
-public class entregarPaquete extends HttpServlet {
+@WebServlet(name = "EntregarPaquete", urlPatterns = {"/EntregarPaquete"})
+public class EntregarPaquete extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,6 +43,9 @@ public class entregarPaquete extends HttpServlet {
             
             String taquilla = request.getParameter("id_taquilla");
             int id_taquilla = Integer.parseInt(taquilla);
+            
+            String repartidor = request.getParameter("id_repartidor");
+            int id_repartidor = Integer.parseInt(repartidor);
 
             MQTTBroker bkr = new MQTTBroker();
             MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Estapaquete");
@@ -51,7 +54,8 @@ public class entregarPaquete extends HttpServlet {
             if(Logic.getEstadoTaquilla(id_taquilla, id_taquillero))
             {
                 Logic.updatePedidoEstadoEntrega("entregado", id_pedido);
-                
+                Logic.updateTaquillaPedido(id_taquilla, id_pedido);
+                Logic.updateRepartidor(id_repartidor, id_pedido);
                 MQTTPublisher.publish(bkr, "Taquillero" + taquillero + "/Taquilla" + taquilla + "/accion", "Cerrar");
                 estado_final=1;
             }
