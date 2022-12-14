@@ -199,6 +199,6 @@ public class ConectionDDBB {
     }
     
     public static PreparedStatement updateRepartidor(Connection con){
-        return getStatement(con, "UPDATE pedido SET id_repartidor = ? WHERE id_pedido=?;");
+        return getStatement(con, "UPDATE pedido SET id_repartidor_repartidor = ? WHERE id_pedido=?;");
     }
 }
