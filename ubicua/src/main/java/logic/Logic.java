@@ -261,8 +261,8 @@ public class Logic {
             ps.setInt(1, id_pedido);
             String estado_entrega = "creado";
             ps.setString(2, estado_entrega);
-            int clave = generarClave(taquillero);
-            ps.setInt(3, clave);
+            String clave = generarClave(taquillero);
+            ps.setString(3, clave);
             ps.setInt(4, taquillero);
             ps.setInt(5, id_cliente);
             ps.setString(6, "Producto de prueba");
@@ -282,20 +282,22 @@ public class Logic {
         return estado_final;
     }
 
-    public static int generarClave(int taquillero) {
+    public static String generarClave(int taquillero) {
         ArrayList<Integer> claves = new ArrayList<Integer>();
-        int numero = 0;
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
+        String numero= null;
         try {
             con = conector.obtainConnection(true);
             Log.log.debug("Database Connected");
+            
             PreparedStatement ps = ConectionDDBB.getClaves(con);
             ps.setInt(1, taquillero);
             String en_reparto = "en reparto";
             String entregado = "entregado";
             ps.setString(2, en_reparto);
             ps.setString(3, entregado);
+            
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -304,9 +306,25 @@ public class Logic {
                 claves.add(clave);
             }
             Random r = new Random();
-            numero = r.nextInt(8999) + 1001;
+            int cifra1 = r.nextInt(9) + 1;
+            int cifra2 = r.nextInt(10);
+            int cifra3 = r.nextInt(10);
+            int cifra4 = r.nextInt(10);
+            String c1 = Integer.toString(cifra1);
+            String c2 = Integer.toString(cifra2);
+            String c3 = Integer.toString(cifra3);
+            String c4 = Integer.toString(cifra4);
+            numero = c1 + c2 + c3 + c4;
             while (claves.contains(numero)) {
-                numero = r.nextInt(8999) + 1001;
+                cifra1 = r.nextInt(9) + 1;
+                cifra2 = r.nextInt(10);
+                cifra3 = r.nextInt(10);
+                cifra4 = r.nextInt(10);
+                c1 = Integer.toString(cifra1);
+                c2 = Integer.toString(cifra2);
+                c3 = Integer.toString(cifra3);
+                c4 = Integer.toString(cifra4);
+                numero = c1 + c2 + c3 + c4;
             }
 
         } catch (SQLException ex) {
