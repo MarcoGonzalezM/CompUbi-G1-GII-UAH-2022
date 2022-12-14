@@ -60,7 +60,7 @@ const int usEcho1 = 32;
 const int numTaquillas = 1;
 
 //IDENTIFICADOR TAQUILLERO
-const int idTaquillero = 0;
+const int idTaquillero = 1;
 String nombreTaquillero = "Taquillero" + String(idTaquillero);
 
 //Sensores Ultrasonido
@@ -72,7 +72,7 @@ SR04 sensores[] =
 //Taquillas
 Taquilla taquillas[] = 
 {
-  Taquilla(ledRojo1, ledVerde1, pinServo1, ledPaquete1, 0)
+  Taquilla(ledRojo1, ledVerde1, pinServo1, ledPaquete1, 1)
 };
 
 //Clave a introducir
