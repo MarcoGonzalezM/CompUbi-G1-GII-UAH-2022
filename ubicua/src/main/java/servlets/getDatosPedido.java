@@ -43,6 +43,8 @@ public class getDatosPedido extends HttpServlet {
             out.print(jsonPedido);
         } catch (Exception e) {
             out.print("-1");
+        } finally {
+            out.close();
         }
     }
 
