@@ -260,11 +260,11 @@ public class Logic {
             ps.setInt(1, id_pedido);
             String estado_entrega = "creado";
             ps.setString(2, estado_entrega);
-            ps.setInt(3, 0);
             int clave = generarClave(taquillero);
-            ps.setInt(4, clave);
-            ps.setInt(5, taquillero);
-            ps.setInt(6, id_cliente);
+            ps.setInt(3, clave);
+            ps.setInt(4, taquillero);
+            ps.setInt(5, id_cliente);
+            ps.setString(6, "Producto de prueba");
             Log.log.info("Query=> {}", ps.toString());
             ps.executeUpdate();
 
