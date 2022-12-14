@@ -201,4 +201,16 @@ public class ConectionDDBB {
     public static PreparedStatement updateRepartidor(Connection con){
         return getStatement(con, "UPDATE pedido SET id_repartidor_repartidor = ? WHERE id_pedido=?;");
     }
+    
+    public static PreparedStatement getNombreCliente(Connection con) {
+        return getStatement(con, "SELECT * FROM cliente WHERE nombre=?");
+    }
+    
+    public static PreparedStatement getMaxIdCliente(Connection con) {
+        return getStatement(con, "SELECT MAX(id_cliente) max_id_cliente FROM cliente");
+    }
+    
+    public static PreparedStatement registrarCliente(Connection con) {
+            return getStatement(con, "INSERT INTO cliente values (?,?,?)");
+    }
 }
