@@ -310,6 +310,8 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
         return numero;
     }
@@ -332,6 +334,8 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
         return id;
     }
@@ -360,6 +364,8 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
 
         return taquilla;
@@ -416,6 +422,8 @@ public class Logic {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
     }
 
@@ -437,6 +445,8 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
     }
 
@@ -458,6 +468,8 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
     }
 
@@ -483,6 +495,8 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
 
         return taquilla;
@@ -510,6 +524,8 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
 
         return taquillero;
@@ -630,6 +646,8 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
     }
 
@@ -656,6 +674,8 @@ public class Logic {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
         return ocupado;
     }
@@ -810,11 +830,13 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
 
         return taquillero;
     }
-    
+
     public static void updateRepartidor(int id_repartidor, int id_pedido) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
@@ -833,9 +855,11 @@ public class Logic {
 
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
     }
-    
+
     public static int registrarCliente(String nombre, String password) {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
@@ -848,28 +872,29 @@ public class Logic {
             ps.setString(1, nombre);
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 id_cliente = getMaxIdCliente();
                 PreparedStatement ps1 = ConectionDDBB.registrarCliente(con);
-                
+
                 ps1.setInt(1, id_cliente);
                 ps1.setString(2, password);
                 ps1.setString(3, nombre);
-                
+
                 Log.log.info("Query=> {}", ps.toString());
                 int r = ps1.executeUpdate();
             }
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
         return id_cliente;
     }
-    
-    
-    public static int getMaxIdCliente(){
+
+    public static int getMaxIdCliente() {
         ConectionDDBB conector = new ConectionDDBB();
         Connection con = null;
-        int id_pedido=-1;
+        int id_pedido = -1;
         try {
             //Obtenemos el id del pedido correspondiente a la clave y taquillero
             con = conector.obtainConnection(true);
@@ -883,6 +908,8 @@ public class Logic {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            conector.closeConnection(con);
         }
         return id_pedido;
     }
