@@ -41,7 +41,7 @@ public class registrarCliente extends HttpServlet {
         try 
         {
             String nombre = request.getParameter("nombre");
-            String password = request.getParameter("passoword");
+            String password = request.getParameter("password");
             
             id_cliente = Logic.registrarCliente(nombre, password);
             
