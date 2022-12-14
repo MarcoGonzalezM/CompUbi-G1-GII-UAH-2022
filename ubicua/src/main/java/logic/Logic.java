@@ -872,16 +872,17 @@ public class Logic {
             ps.setString(1, nombre);
             Log.log.info("Query=> {}", ps.toString());
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                id_cliente = getMaxIdCliente();
+            if (!rs.next()) {
+                id_cliente = getMaxIdCliente()+1;
                 PreparedStatement ps1 = ConectionDDBB.registrarCliente(con);
 
                 ps1.setInt(1, id_cliente);
                 ps1.setString(2, password);
                 ps1.setString(3, nombre);
-
+                
+                ps1.executeUpdate();
+                
                 Log.log.info("Query=> {}", ps.toString());
-                int r = ps1.executeUpdate();
             }
         } catch (SQLException ex) {
             Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
