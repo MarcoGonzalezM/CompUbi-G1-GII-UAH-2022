@@ -8,16 +8,28 @@
     tools:context=".IniciarSesionRepartidor">
 
     <TextView
-        android:id="@+id/Taquilla"
+        android:id="@+id/taquillero"
+        android:layout_width="287dp"
+        android:layout_height="42dp"
+        android:text="Taquillero:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.33"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.394" />
+
+    <TextView
+        android:id="@+id/taquilla"
         android:layout_width="287dp"
         android:layout_height="42dp"
         android:text="Taquilla:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.322"
+        app:layout_constraintHorizontal_bias="0.33"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.269" />
+        app:layout_constraintVertical_bias="0.477" />
 
     <Spinner
         android:id="@+id/spinner"
@@ -25,10 +37,10 @@
         android:layout_height="52dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.325"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.375" />
+        app:layout_constraintVertical_bias="0.586" />
 
     <TextView
         android:id="@+id/labelPaq"
@@ -40,7 +52,21 @@
         app:layout_constraintHorizontal_bias="0.322"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.526" />
+        app:layout_constraintVertical_bias="0.066" />
+
+    <EditText
+        android:id="@+id/textIdPaq"
+        android:layout_width="210dp"
+        android:layout_height="49dp"
+        android:visibility="visible"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.268"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.168"
+        tools:visibility="visible"></EditText>
 
     <Button
         android:id="@+id/button_descartar"
@@ -55,6 +81,18 @@
         app:layout_constraintVertical_bias="0.882" />
 
     <Button
+        android:id="@+id/button_taquillero"
+        android:layout_width="199dp"
+        android:layout_height="68dp"
+        android:text="Buscar taquillero"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.37"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.257" />
+
+    <Button
         android:id="@+id/button_finalizar"
         android:layout_width="163dp"
         android:layout_height="68dp"
@@ -65,20 +103,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.882" />
-
-    <EditText
-        android:id="@+id/textIdPaq"
-        android:layout_width="210dp"
-        android:layout_height="49dp"
-        android:visibility="visible"
-        app:hintEnabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.268"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.634"
-        tools:visibility="visible"></EditText>
 
     <TextView
         android:id="@+id/labelErrMess"

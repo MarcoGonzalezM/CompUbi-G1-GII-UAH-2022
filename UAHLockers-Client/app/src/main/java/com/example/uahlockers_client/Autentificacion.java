@@ -44,14 +44,16 @@ public class Autentificacion extends AppCompatActivity {
             }
         });
     }
+    public int getIdNotificacion(){return this.idNotificacion;}
+
     public void setResultado(int resultado) {
         this.resultado = resultado;
     }
 
     public void enviarAuth(boolean aceptada) {
         String urlStr = "http://192.168.0.166:8080";
-        urlStr += "/uahlockers/autentificar";
-        urlStr = urlStr + "?aceptada=";
+        urlStr += "/uahlockers/abrirTaquilla";
+        urlStr = urlStr + "?recogido=";
         if (aceptada) urlStr += "true";
         else urlStr += "false";
         AutentificacionServerConnectionThread thread = new AutentificacionServerConnectionThread(this, urlStr);

@@ -86,17 +86,17 @@ public class MisNotificaciones extends AppCompatActivity {
         try {
             for (int i=0; i < jsonNotifs.length(); i++){
                 JSONObject jsonObject = jsonNotifs.getJSONObject(i);
-                listIdsNotifs.add(jsonObject.getInt("id_notificacion"));
+                listIdsNotifs.add(jsonObject.getInt("id_recogida"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spinner.setAdapter(new ArrayAdapter<Integer>(this.context, android.R.layout.simple_spinner_item, listIdsNotifs));
+        spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, listIdsNotifs));
     }
 
     private void loadNotificaciones(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/getNotificaciones";
+        urlStr+="/uahlockers/getRecogidaNotificaciones";
         MisNotificacionesServerConnectionThread thread = new MisNotificacionesServerConnectionThread(this, urlStr);
         try {
             thread.join();

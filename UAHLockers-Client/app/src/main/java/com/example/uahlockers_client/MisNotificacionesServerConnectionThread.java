@@ -17,7 +17,7 @@ public class MisNotificacionesServerConnectionThread extends ServerConnectionThr
     public MisNotificacionesServerConnectionThread(MisNotificaciones p_activity, String p_url) {
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/getNotificaciones")) {
+        if (urlStr.contains("/getRecogidaNotificaciones")) {
             commId = 1;
         } else commId = -1;
         start();

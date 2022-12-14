@@ -43,7 +43,7 @@ public class PedirPaquete extends AppCompatActivity {
         listIdsTaquilleros = new ArrayList<>();
 
         idCliente = getIntent().getIntExtra("idCliente",0);
-
+        System.out.println(idCliente);
         //Código del botón
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,12 +93,12 @@ public class PedirPaquete extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spinner.setAdapter(new ArrayAdapter<Integer>(this.context, android.R.layout.simple_spinner_item, listIdsTaquilleros));
+        spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, listIdsTaquilleros));
     }
 
     private void pedirPaq(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/pedirPaqPrueba";
+        urlStr+="/uahlockers/pedirPaquetePrueba";
         if (idTaq==0){
             textErrMess.setText("Error: no se ha seleccionado ningún taquillero");
             return;

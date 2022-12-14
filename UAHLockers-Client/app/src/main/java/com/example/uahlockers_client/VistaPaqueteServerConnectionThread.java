@@ -20,13 +20,15 @@ public class VistaPaqueteServerConnectionThread extends ServerConnectionThread{
     public VistaPaqueteServerConnectionThread(VistaPaquete p_activity, String p_url) {
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/getPaquete")) {
+        if (urlStr.contains("/getDatosPedido")) {
             commId = 1;
         } else if (urlStr.contains("/getTaquilleros")) {
             commId = 2;
         } else if (urlStr.contains("/writeTaquillero")) {
             commId = 3;
-        } else
+        } else if (urlStr.contains("/getRecogidaNotificacionPedido")) {
+            commId = 4;
+        }else
             commId = -1;
         start();
     }
@@ -35,18 +37,20 @@ public class VistaPaqueteServerConnectionThread extends ServerConnectionThread{
         switch(commId){
             case (1):{
                 getPaquete();
+                break;
             }
             case (2):{
                 loadTaquilleros();
+                break;
             }
             case (3):{
-                writeTaquillero();
+                //writeTaquillero();
+                break;
             }
             case (4):{
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
                     while(activity.hasWindowFocus()) {
                         getNotif();
-                        System.out.println("MEGACACA");
                         try {
                             sleep(5000);
                         } catch (InterruptedException e) {
@@ -65,8 +69,7 @@ public class VistaPaqueteServerConnectionThread extends ServerConnectionThread{
         String response = "";
         try {
             int idPaquete = activity.getIdPaquete();
-            int idCliente = activity.getIdCliente();
-            urlStr = urlStr + "?paquete="+idPaquete+"&id_cliente="+idCliente;
+            urlStr = urlStr + "?id_pedido="+idPaquete;
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -84,8 +87,7 @@ public class VistaPaqueteServerConnectionThread extends ServerConnectionThread{
         int resultado = 0;
         try {
             int idPaquete = activity.getIdPaquete();
-            int idCliente = activity.getIdCliente();
-            urlStr = urlStr + "?paquete="+idPaquete+"&id_cliente="+idCliente;
+            urlStr = urlStr + "?id_pedido="+idPaquete;
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();

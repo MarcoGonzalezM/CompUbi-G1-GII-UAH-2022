@@ -75,8 +75,9 @@ public class IniciarSesionCliente extends AppCompatActivity {
             }
             default: {
                 Intent i = new Intent(IniciarSesionCliente.this, MenuPrincipalCliente.class);
-                startActivity(i);
+                idCliente = resultado;
                 i.putExtra("idCliente", idCliente);
+                startActivity(i);
                 finish();
             }
         }

@@ -59,10 +59,14 @@ public class IniciarSesionRepartidor extends AppCompatActivity{
                 textErrMess.setText("Error: contraseña incorrecta");
                 break;
             }
+            case 0:{
+                textErrMess.setText("Error: no se pudo conectar al servidor");
+                break;
+            }
             default: {
                 Intent i = new Intent(IniciarSesionRepartidor.this, MenuPrincipalRepartidor.class);
-                startActivity(i);
                 i.putExtra("idRepartidor", idRepartidor);
+                startActivity(i);
                 finish();
             }
         }

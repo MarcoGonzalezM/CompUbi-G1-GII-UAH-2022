@@ -24,8 +24,8 @@ public class MenuPrincipalRepartidor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MenuPrincipalRepartidor.this, DepositarPaquete.class);
-                startActivity(i);
                 i.putExtra("idRepartidor", idRepartidor);
+                startActivity(i);
                 finish();
             }
         });

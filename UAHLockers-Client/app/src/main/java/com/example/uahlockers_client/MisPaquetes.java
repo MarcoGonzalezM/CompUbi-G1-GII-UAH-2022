@@ -91,12 +91,12 @@ public class MisPaquetes extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spinner.setAdapter(new ArrayAdapter<Integer>(this.context, android.R.layout.simple_spinner_item, listIdsPaquetes));
+        spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, listIdsPaquetes));
     }
 
     private void loadPaquetes(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/getPaquetes";
+        urlStr+="/uahlockers/getPedidosCliente";
         MisPaquetesServerConnectionThread thread = new MisPaquetesServerConnectionThread(this, urlStr);
         try {
             thread.join();

@@ -17,7 +17,7 @@ public class MisPaquetesServerConnectionThread extends ServerConnectionThread{
     public MisPaquetesServerConnectionThread(MisPaquetes p_activity, String p_url) {
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/getPaquetes")) {
+        if (urlStr.contains("/getPedidosCliente")) {
             commId = 1;
         } else commId = -1;
         start();

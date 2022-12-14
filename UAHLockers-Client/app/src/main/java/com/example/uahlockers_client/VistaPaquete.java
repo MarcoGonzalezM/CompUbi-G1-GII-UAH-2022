@@ -58,6 +58,7 @@ public class VistaPaquete extends AppCompatActivity {
                     case -1:{
                         textErrMess.setText("Este paquete aún no está en un taquillero.\n" +
                                 "No se puede autenticar todavía.");
+                        break;
                     }
                     default:{
                         Intent i = new Intent(VistaPaquete.this, Autentificacion.class);
@@ -86,7 +87,7 @@ public class VistaPaquete extends AppCompatActivity {
                 if (listIdsTaquilleros.size()==0){
                     idTaq=0;
                 }
-                writeTaquillero();
+                //writeTaquillero();
                 switch (resultado){
                     case 1:{
                         textErrMess.setText("Guardado.");
@@ -113,9 +114,10 @@ public class VistaPaquete extends AppCompatActivity {
         try {
             this.paquete.setId_pedido(paquete.getInt("id_pedido"));
             this.paquete.setTaquillero(paquete.getInt("taquillero"));
-            this.paquete.setCliente(paquete.getString("cliente"));
+            this.paquete.setId_cliente(paquete.getInt("id_cliente"));
             this.paquete.setEstado_entrega(paquete.getString("estado_entrega"));
             this.idPaquete = this.paquete.getId_pedido();
+            System.out.println("Producto: "+this.paquete.getId_pedido());
             textProducto.setText("Producto: "+this.paquete.getId_pedido());
             textEstado.setText("Estado: "+this.paquete.getEstado_entrega());
             textCodigo.setText("PIN: "+this.paquete.getCodigo());
@@ -139,7 +141,7 @@ public class VistaPaquete extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spinner.setAdapter(new ArrayAdapter<Integer>(this.context, android.R.layout.simple_spinner_item, listIdsTaquilleros));
+        spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, listIdsTaquilleros));
     }
 
     public void setResultado(int resultado){
@@ -149,7 +151,7 @@ public class VistaPaquete extends AppCompatActivity {
 
     private void loadPaquete(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/getPaquete";
+        urlStr+="/uahlockers/getDatosPedido";
         VistaPaqueteServerConnectionThread thread = new VistaPaqueteServerConnectionThread(this, urlStr);
         try {
             thread.join();
@@ -170,6 +172,16 @@ public class VistaPaquete extends AppCompatActivity {
     private void writeTaquillero(){
         String urlStr = "http://192.168.0.166:8080";
         urlStr+="/uahlockers/writeTaquillero";
+        VistaPaqueteServerConnectionThread thread = new VistaPaqueteServerConnectionThread(this, urlStr);
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    private void getNotif(){
+        String urlStr = "http://192.168.0.166:8080";
+        urlStr+="/uahlockers/getRecogidaNotificacionPedido";
         VistaPaqueteServerConnectionThread thread = new VistaPaqueteServerConnectionThread(this, urlStr);
         try {
             thread.join();

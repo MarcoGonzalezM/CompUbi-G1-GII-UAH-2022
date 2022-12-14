@@ -48,13 +48,14 @@ public class PedirPaqueteServerConnectionThread extends ServerConnectionThread{
         try {
             int idTaq = activity.getIdTaq();
             int idCliente = activity.getIdCliente();
-            urlStr = urlStr + "?taquillero="+idTaq+"&id_cliente="+idCliente;
+            urlStr = urlStr +"?id_cliente="+idCliente+"&taquillero="+idTaq;
+            System.out.println(urlStr);
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             response = convertStreamToString(in);
-            resultado = Integer.valueOf(response);
+            resultado = Integer.valueOf(response.substring(0,response.length()-1));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -43,6 +43,7 @@ public class IniciarSesionServerConnectionThread extends ServerConnectionThread{
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             response = convertStreamToString(in);
             resultado = (int) Integer.valueOf(response.substring(0,response.length()-1));
+            System.out.println(resultado);
         } catch (Exception e) {
             e.printStackTrace();
         }

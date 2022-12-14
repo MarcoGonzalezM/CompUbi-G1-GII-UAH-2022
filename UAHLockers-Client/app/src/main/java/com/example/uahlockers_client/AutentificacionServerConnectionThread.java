@@ -14,7 +14,7 @@ public class AutentificacionServerConnectionThread extends ServerConnectionThrea
     public AutentificacionServerConnectionThread(Autentificacion p_activity, String p_url) {
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/autentificar")) {
+        if (urlStr.contains("/abrirTaquilla")) {
             commId = 1;
         } else
             commId = -1;
@@ -36,6 +36,8 @@ public class AutentificacionServerConnectionThread extends ServerConnectionThrea
         String response = "";
         int resultado = 0;
         try {
+            int idNotif = activity.getIdNotificacion();
+            urlStr += "?id_recogida=" + idNotif + "&recogido=true";
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
