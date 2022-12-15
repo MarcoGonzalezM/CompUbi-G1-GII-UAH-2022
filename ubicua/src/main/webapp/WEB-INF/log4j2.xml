@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+	<Appenders>				
+	    <!-- LOG -->
+		<RollingFile name="LogFile" fileName="${env:CATALINA_HOME}/webapps/uahlockers/log/log.log"
+			filePattern="${env:CATALINA_HOME}/webapps/uahlockers/log/logs/raspberry-%d{yyyy}-%i.log.gz">
+			<PatternLayout
+				pattern="%n%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-30l %logger{36} ### %msg"
+				header="-- RASPBERRY EXAMPLE --" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingFile>		
+	    <!-- LOGDB -->
+		<RollingFile name="LogFileDB" fileName="${env:CATALINA_HOME}/webapps/uahlockers/log/logdb.log"
+			filePattern="${env:CATALINA_HOME}/webapps/uahlockers/log/logs/raspberry-%d{yyyy}-%i.logdb.gz">
+			<PatternLayout
+				pattern="%n%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-30l %logger{36} ### %msg"
+				header="-- RASPBERRY EXAMPLE --" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingFile>		
+	    <!-- LOGMQTT -->
+		<RollingFile name="LogFileMQTT" fileName="${env:CATALINA_HOME}/webapps/uahlockers/log/logmqtt.log"
+			filePattern="${env:CATALINA_HOME}/webapps/uahlockers/log/logs/raspberry-%d{yyyy}-%i.logmqtt.gz">
+			<PatternLayout
+				pattern="%n%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-30l %logger{36} ### %msg"
+				header="-- RASPBERRY EXAMPLE --" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingFile>	
+	</Appenders>
+	<Loggers>
+	    <!-- LOG -->
+		<Logger name="log" additivity="FALSE" level="INFO">
+            <AppenderRef ref="LogFile" level="INFO" />
+        </Logger>
+	    <!-- LOGDB -->
+		<Logger name="logdb" additivity="FALSE" level="INFO">
+            <AppenderRef ref="LogFileDB" level="INFO" />
+        </Logger>
+	    <!-- LOGMQTT -->
+		<Logger name="logmqtt" additivity="FALSE" level="INFO">
+            <AppenderRef ref="LogFileMQTT" level="INFO" />
+        </Logger>
+	</Loggers>
+</Configuration>
