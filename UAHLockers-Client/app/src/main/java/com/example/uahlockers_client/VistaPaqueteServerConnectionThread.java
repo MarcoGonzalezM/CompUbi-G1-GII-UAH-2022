@@ -48,7 +48,8 @@ public class VistaPaqueteServerConnectionThread extends ServerConnectionThread{
                 break;
             }
             case (4):{
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
+                getNotif();
+                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
                     while(activity.hasWindowFocus()) {
                         getNotif();
                         try {
@@ -57,7 +58,7 @@ public class VistaPaqueteServerConnectionThread extends ServerConnectionThread{
                             e.printStackTrace();
                         }
                     }
-                }
+                }*/
             }
             default:{
 
@@ -69,7 +70,7 @@ public class VistaPaqueteServerConnectionThread extends ServerConnectionThread{
         String response = "";
         try {
             int idPaquete = activity.getIdPaquete();
-            urlStr = urlStr + "?id_pedido="+idPaquete;
+            if (!urlStr.contains("?id_pedido")){ urlStr += "?id_pedido="+idPaquete;}
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -88,12 +89,13 @@ public class VistaPaqueteServerConnectionThread extends ServerConnectionThread{
         try {
             int idPaquete = activity.getIdPaquete();
             urlStr = urlStr + "?id_pedido="+idPaquete;
+            System.out.println(urlStr);
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             response = convertStreamToString(in);
-            resultado = Integer.valueOf(response);
+            resultado = Integer.valueOf(response.substring(0,response.length()-1));
         } catch (IOException e) {
             e.printStackTrace();
         }

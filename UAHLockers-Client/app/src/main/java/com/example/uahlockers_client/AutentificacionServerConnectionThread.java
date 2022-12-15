@@ -38,15 +38,13 @@ public class AutentificacionServerConnectionThread extends ServerConnectionThrea
         try {
             int idNotif = activity.getIdNotificacion();
             urlStr += "?id_recogida=" + idNotif + "&recogido=true";
+            System.out.println(urlStr);
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            response = convertStreamToString(in);
-            resultado = Integer.valueOf(response);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        activity.setResultado(resultado);
     }
 }

@@ -25,7 +25,6 @@ public class VistaPaquete extends AppCompatActivity {
     private Button button1, button2;
     private Spinner spinner;
     private TextView textErrMess, textProducto, textEstado, textCodigo;
-    private final Context context = new Context();
     private Pedido paquete;
     private ArrayList<Integer> listIdsTaquilleros;
 
@@ -51,7 +50,8 @@ public class VistaPaquete extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (resultado){
+                getNotif();
+                switch (idNotificacion){
                     case 0:{
                         textErrMess.setText("Error: No se puede conectar con el servidor.");
                     }
@@ -116,8 +116,8 @@ public class VistaPaquete extends AppCompatActivity {
             this.paquete.setTaquillero(paquete.getInt("taquillero"));
             this.paquete.setId_cliente(paquete.getInt("id_cliente"));
             this.paquete.setEstado_entrega(paquete.getString("estado_entrega"));
+            this.paquete.setCodigo(paquete.getString("codigo"));
             this.idPaquete = this.paquete.getId_pedido();
-            System.out.println("Producto: "+this.paquete.getId_pedido());
             textProducto.setText("Producto: "+this.paquete.getId_pedido());
             textEstado.setText("Estado: "+this.paquete.getEstado_entrega());
             textCodigo.setText("PIN: "+this.paquete.getCodigo());
@@ -129,7 +129,6 @@ public class VistaPaquete extends AppCompatActivity {
 
     public void setIdNotificacion(int idNotificacion){
         this.idNotificacion = idNotificacion;
-        //TODO: obtener el Id de notificacion a partir de un Paquete
     }
 
     public void setListTaquilleros(JSONArray jsonTaquilleros){

@@ -16,7 +16,7 @@ public class IniciarSesionRepartidor extends AppCompatActivity{
     private EditText textUName, textPwd;
     private TextView textErrMess;
     private String uname, hashPwd;
-    private int resultado;
+    private int resultado, idRepartidor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class IniciarSesionRepartidor extends AppCompatActivity{
     }
 
     public void iniciarSes(String uname, String pwd){
-        int idRepartidor=0;
+        idRepartidor=0;
         byte [] pwdBytes= pwd.getBytes(StandardCharsets.UTF_8);
         String hashPwd = "";
         for (int i=0;i<pwdBytes.length;i++){
@@ -49,7 +49,6 @@ public class IniciarSesionRepartidor extends AppCompatActivity{
         this.hashPwd = pwd;
         sendLogIn();
 
-        int resultado = 0;
         switch(resultado){
             case -1:{
                 textErrMess.setText("Error: el nombre de usuario no está registrado");
@@ -93,4 +92,7 @@ public class IniciarSesionRepartidor extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+
+    public void setRepartidor(int repartidor) { this.idRepartidor = repartidor;}
+
 }

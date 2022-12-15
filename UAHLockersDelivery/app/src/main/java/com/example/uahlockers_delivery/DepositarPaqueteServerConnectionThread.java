@@ -17,11 +17,11 @@ public class DepositarPaqueteServerConnectionThread extends ServerConnectionThre
     public DepositarPaqueteServerConnectionThread(DepositarPaquete p_activity, String p_url){
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/EntregarPaquete")){
+        if (urlStr.contains("/entregarPaquete")){
             commId = 1;
-        } else if (urlStr.contains("/GetTaquillasFromTaquillero")){
+        } else if (urlStr.contains("/getTaquillasFromTaquillero")){
             commId = 2;
-        } else if (urlStr.contains("/GetTaquillero")){
+        } else if (urlStr.contains("/getTaquillero")){
             commId = 3;
         } else commId = -1;
         start();
@@ -31,10 +31,13 @@ public class DepositarPaqueteServerConnectionThread extends ServerConnectionThre
         switch(commId){
             case (1):{
                 depositarPaquete();
+                break;
             } case (2):{
                 loadTaquillas();
+                break;
             } case (3):{
                 getTaquillero();
+                break;
             }default: {
 
             }
@@ -47,7 +50,10 @@ public class DepositarPaqueteServerConnectionThread extends ServerConnectionThre
         try{
             int idTaquilla = activity.getIdTaquilla();
             int idPaquete = activity.getIdPaq();
-            urlStr = urlStr +"&id_pedido="+idPaquete + "?id_taquilla="+idTaquilla;
+            int idRepartidor = activity.getRepartidor();
+            int idTaquillero = activity.getIdTaquillero();
+            urlStr = urlStr +"?id_pedido="+idPaquete + "&id_taquilla="+idTaquilla+"&id_repartidor="+idRepartidor+"&id_taquillero="+idTaquillero;
+            System.out.println(urlStr);
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -63,8 +69,8 @@ public class DepositarPaqueteServerConnectionThread extends ServerConnectionThre
     private void loadTaquillas(){
         String response = "";
         try{
-            int idPaquete = activity.getIdPaq();
-            urlStr = urlStr + "?id_pedido="+idPaquete;
+            int idTaquillero = activity.getIdTaquillero();
+            urlStr = urlStr + "?id_taquillero="+idTaquillero;
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -82,7 +88,7 @@ public class DepositarPaqueteServerConnectionThread extends ServerConnectionThre
         int resultado = 0;
         try{
             int idPaquete = activity.getIdPaq();
-            urlStr = urlStr +"&id_pedido="+idPaquete;
+            urlStr = urlStr +"?id_pedido="+idPaquete;
             URL url = new URL(urlStr);
             HttpURLConnection urlConnection = null;
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -92,7 +98,7 @@ public class DepositarPaqueteServerConnectionThread extends ServerConnectionThre
         } catch (Exception e) {
             e.printStackTrace();
         }
-        activity.setResultado(resultado);
+        activity.setIdTaquillero(resultado);
     }
 
 }

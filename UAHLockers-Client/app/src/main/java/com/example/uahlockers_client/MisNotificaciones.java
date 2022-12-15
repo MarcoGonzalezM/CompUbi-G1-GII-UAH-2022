@@ -33,7 +33,7 @@ public class MisNotificaciones extends AppCompatActivity {
         button1 = (Button) findViewById(R.id.button_ver_detalle);
         button2 = (Button) findViewById(R.id.button_volver);
         spinner = (Spinner) findViewById(R.id.spinner);
-            textErrMess = (TextView) findViewById(R.id.labelErrMess);
+        textErrMess = (TextView) findViewById(R.id.labelErrMess);
 
         listIdsNotifs = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public class MisNotificaciones extends AppCompatActivity {
         try {
             for (int i=0; i < jsonNotifs.length(); i++){
                 JSONObject jsonObject = jsonNotifs.getJSONObject(i);
-                listIdsNotifs.add(jsonObject.getInt("id_recogida"));
+                listIdsNotifs.add(jsonObject.getInt("id_pedido"));
             }
         } catch (Exception e) {
             e.printStackTrace();

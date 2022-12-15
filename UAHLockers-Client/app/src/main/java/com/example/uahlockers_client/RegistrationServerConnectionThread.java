@@ -14,9 +14,9 @@ public class RegistrationServerConnectionThread extends ServerConnectionThread {
     public RegistrationServerConnectionThread(RegistroUsuario p_activity, String p_url) {
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/iniciarSesion")) {
+        if (urlStr.contains("/iniciarSesionCliente")) {
             commId = 1;
-        } else if (urlStr.contains("/registration")) {
+        } else if (urlStr.contains("/registrarCliente")) {
             commId = 2;
         } else commId = -1;
         start();

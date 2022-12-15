@@ -54,7 +54,9 @@ public class RegistroUsuario extends AppCompatActivity {
                 }
 
                 default: {
-                    iniciarSes(textUName.getText().toString(),textPwd.getText().toString());
+                    Intent i = new Intent(RegistroUsuario.this, MenuPrincipalCliente.class);
+                    startActivity(i);
+                    i.putExtra("idCliente", resultado);
                     finish();
                 }
             }
@@ -72,7 +74,8 @@ public class RegistroUsuario extends AppCompatActivity {
         }
 
         this.uname = uname;
-        this.hashPwd = hashPwd;
+        //this.hashPwd = hashPwd;
+        this.hashPwd = this.pwd;
         sendLogIn();
 
         switch(resultado){
@@ -103,7 +106,7 @@ public class RegistroUsuario extends AppCompatActivity {
     }
 
     public String getPwd(){
-        return this.hashPwd;
+        return this.pwd;
     }
 
     public void setResultado(int resultado){
@@ -112,7 +115,7 @@ public class RegistroUsuario extends AppCompatActivity {
 
     private void sendRegistration(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/registration";
+        urlStr+="/uahlockers/registrarCliente";
         RegistrationServerConnectionThread thread = new RegistrationServerConnectionThread(this, urlStr);
         try {
             thread.join();
@@ -123,7 +126,7 @@ public class RegistroUsuario extends AppCompatActivity {
 
     private void sendLogIn(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/iniciarSesion";
+        urlStr+="/uahlockers/iniciarSesionCliente";
         RegistrationServerConnectionThread thread = new RegistrationServerConnectionThread(this, urlStr);
         try {
             thread.join();

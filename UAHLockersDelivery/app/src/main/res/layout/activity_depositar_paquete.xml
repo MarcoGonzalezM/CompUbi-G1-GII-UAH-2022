@@ -32,7 +32,7 @@
         app:layout_constraintVertical_bias="0.477" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/action_bar_spinner"
         android:layout_width="288dp"
         android:layout_height="52dp"
         app:layout_constraintBottom_toBottomOf="parent"

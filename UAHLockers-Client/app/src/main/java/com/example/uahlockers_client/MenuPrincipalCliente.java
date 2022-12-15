@@ -23,9 +23,7 @@ public class MenuPrincipalCliente extends AppCompatActivity {
         button3 = (Button) findViewById(R.id.button_mis_not);
         button5 = (Button) findViewById(R.id.button_cerr_ses);
 
-        System.out.println((getIntent().getExtras()));
         idCliente = getIntent().getIntExtra("idCliente",0);
-        System.out.println(idCliente);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

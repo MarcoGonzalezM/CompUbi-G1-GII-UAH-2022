@@ -25,7 +25,7 @@ public class Autentificacion extends AppCompatActivity {
         buttonY.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enviarAuth(true);
+                enviarAuth();
                 Intent i = new Intent(Autentificacion.this, MenuPrincipalCliente.class);
                 i.putExtra("idCliente", idCliente);
                 startActivity(i);
@@ -36,7 +36,6 @@ public class Autentificacion extends AppCompatActivity {
         buttonN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enviarAuth(false);
                 Intent i = new Intent(Autentificacion.this, MenuPrincipalCliente.class);
                 i.putExtra("idCliente", idCliente);
                 startActivity(i);
@@ -50,12 +49,9 @@ public class Autentificacion extends AppCompatActivity {
         this.resultado = resultado;
     }
 
-    public void enviarAuth(boolean aceptada) {
+    public void enviarAuth() {
         String urlStr = "http://192.168.0.166:8080";
         urlStr += "/uahlockers/abrirTaquilla";
-        urlStr = urlStr + "?recogido=";
-        if (aceptada) urlStr += "true";
-        else urlStr += "false";
         AutentificacionServerConnectionThread thread = new AutentificacionServerConnectionThread(this, urlStr);
         try {
             thread.join();

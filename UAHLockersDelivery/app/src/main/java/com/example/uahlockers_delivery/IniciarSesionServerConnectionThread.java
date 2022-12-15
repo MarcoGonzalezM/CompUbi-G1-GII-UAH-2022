@@ -47,5 +47,6 @@ public class IniciarSesionServerConnectionThread extends ServerConnectionThread{
             e.printStackTrace();
         }
         activity.setResultado(resultado);
+        activity.setRepartidor(resultado);
     }
 }

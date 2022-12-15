@@ -24,7 +24,6 @@ public class DepositarPaquete extends AppCompatActivity {
     private TextView textErrMess, textTaquillero;
     private Spinner spinner;
     private int idRepartidor, idPaq, idTaquilla, idTaquillero, resultado;
-    private final Context context = new Context();
     private ArrayList<Integer> listIdsTaquillas;
 
 
@@ -33,20 +32,24 @@ public class DepositarPaquete extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_depositar_paquete);
 
-        button1 = (Button) findViewById(R.id.button_descartar);
-        button2 = (Button) findViewById(R.id.button_finalizar);
+        button1 = (Button) findViewById(R.id.button_finalizar);
+        button2 = (Button) findViewById(R.id.button_descartar);
         button3 = (Button) findViewById(R.id.button_taquillero);
         textIdPaq = (EditText) findViewById(R.id.textIdPaq);
         textTaquillero = (TextView) findViewById(R.id.taquillero);
         textErrMess = (TextView) findViewById(R.id.labelErrMess);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = (Spinner) findViewById(R.id.action_bar_spinner);
+
+        listIdsTaquillas = new ArrayList<>();
 
         idRepartidor = getIntent().getIntExtra("idRepartidor",0);
+        System.out.println(idRepartidor);
+        idTaquillero = 0;
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registrarPaq(Integer.valueOf(textIdPaq.getText().toString()));
+                registrarPaq();
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +64,24 @@ public class DepositarPaquete extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                idPaq = Integer.valueOf(textIdPaq.getText().toString());
+                if (!(idPaq>0)){return;}
                 getTaquillero();
+                switch(idTaquillero) {
+                    case -1: {
+                        textErrMess.setText("Error: paquete desconocido o en uso");
+                        break;
+                    }
+                    case -2: {
+                        textErrMess.setText("Error: taquilla ocupada");
+                        break;
+                    }
+                    default: {
+                        textTaquillero.setText("Taquillero: "+idTaquillero);
+                    }
+                }
                 loadTaquillas();
+                setAdapter();
             }
         });
         //Código del spinner
@@ -80,8 +99,10 @@ public class DepositarPaquete extends AppCompatActivity {
         });
     }
 
-    public void registrarPaq(int idPaq){
-        this.idPaq = idPaq;
+    private void setAdapter(){
+        spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, listIdsTaquillas));}
+
+    public void registrarPaq(){
         sendPaq();
 
         switch(resultado){
@@ -113,7 +134,7 @@ public class DepositarPaquete extends AppCompatActivity {
 
     private void sendPaq(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/EntregarPaquete";
+        urlStr+="/uahlockers/entregarPaquete";
         DepositarPaqueteServerConnectionThread thread = new DepositarPaqueteServerConnectionThread(this, urlStr);
         try {
             thread.join();
@@ -131,12 +152,11 @@ public class DepositarPaquete extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spinner.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, listIdsTaquillas));
     }
 
     private void loadTaquillas(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/GetTaquillasFromTaquillero";
+        urlStr+="/uahlockers/getTaquillasFromTaquillero";
         DepositarPaqueteServerConnectionThread thread = new DepositarPaqueteServerConnectionThread(this, urlStr);
         try {
             thread.join();
@@ -145,30 +165,21 @@ public class DepositarPaquete extends AppCompatActivity {
         }
     }
 
-    private void getTaquillero(){
+    private void getTaquillero() {
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/GetTaquillero";
+        urlStr += "/uahlockers/getTaquillero";
         DepositarPaqueteServerConnectionThread thread = new DepositarPaqueteServerConnectionThread(this, urlStr);
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        switch(resultado){
-            case -1:{
-                textErrMess.setText("Error: paquete desconocido");
-                break;
-            }
-            case -2:{
-                textErrMess.setText("Error: taquilla ocupada");
-                break;
-            }
-            default: {
-                Intent i = new Intent(DepositarPaquete.this, MenuPrincipalRepartidor.class);
-                i.putExtra("idRepartidor", idRepartidor);
-                startActivity(i);
-                finish();
-            }
-        }
     }
+
+    public int getRepartidor() {return this.idRepartidor;}
+
+    public int getIdTaquillero() {return this.idTaquillero;}
+
+    public void setIdTaquillero(int idTaquillero) {this.idTaquillero = idTaquillero;}
+
 }

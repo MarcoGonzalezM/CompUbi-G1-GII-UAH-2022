@@ -14,7 +14,7 @@ public class IniciarSesionServerConnectionThread extends ServerConnectionThread{
     public IniciarSesionServerConnectionThread(IniciarSesionCliente p_activity, String p_url){
         activity = p_activity;
         urlStr = p_url;
-        if (urlStr.contains("/iniciarSesion")){
+        if (urlStr.contains("/iniciarSesionCliente")){
             commId = 1;
         } else commId = -1;
         start();

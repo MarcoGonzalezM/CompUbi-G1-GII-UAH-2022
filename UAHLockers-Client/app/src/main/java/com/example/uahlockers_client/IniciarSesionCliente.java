@@ -97,7 +97,7 @@ public class IniciarSesionCliente extends AppCompatActivity {
 
     private void sendLogIn(){
         String urlStr = "http://192.168.0.166:8080";
-        urlStr+="/uahlockers/iniciarSesion";
+        urlStr+="/uahlockers/iniciarSesionCliente";
         IniciarSesionServerConnectionThread thread = new IniciarSesionServerConnectionThread(this, urlStr);
         try {
             thread.join();

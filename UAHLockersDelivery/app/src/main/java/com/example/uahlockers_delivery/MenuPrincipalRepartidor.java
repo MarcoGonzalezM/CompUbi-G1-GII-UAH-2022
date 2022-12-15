@@ -9,17 +9,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MenuPrincipalRepartidor extends AppCompatActivity {
 
-    int idRepartidor;
+    private int idRepartidor;
+    private Button button1,button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal_repartidor);
 
-        Button button1 = (Button) findViewById(R.id.button_depositar_paq);
+        button1 = (Button) findViewById(R.id.button_depositar_paq);
+        button2 = (Button) findViewById(R.id.button_cerrar_ses);
+
 
         idRepartidor = getIntent().getIntExtra("idRepartidor",0);
-
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,6 +31,13 @@ public class MenuPrincipalRepartidor extends AppCompatActivity {
                 finish();
             }
         });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MenuPrincipalRepartidor.this, IniciarSesionRepartidor.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
-
 }
