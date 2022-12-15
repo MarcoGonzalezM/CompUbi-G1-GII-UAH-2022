@@ -43,7 +43,6 @@ public class DepositarPaquete extends AppCompatActivity {
         listIdsTaquillas = new ArrayList<>();
 
         idRepartidor = getIntent().getIntExtra("idRepartidor",0);
-        System.out.println(idRepartidor);
         idTaquillero = 0;
 
         button1.setOnClickListener(new View.OnClickListener() {
