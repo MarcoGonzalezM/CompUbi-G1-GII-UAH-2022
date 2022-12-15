@@ -42,7 +42,6 @@ public class PedirPaquete extends AppCompatActivity {
         listIdsTaquilleros = new ArrayList<>();
 
         idCliente = getIntent().getIntExtra("idCliente",0);
-        System.out.println(idCliente);
         //Código del botón
         button1.setOnClickListener(new View.OnClickListener() {
             @Override

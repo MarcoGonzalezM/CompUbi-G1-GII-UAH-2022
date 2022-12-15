@@ -22,7 +22,6 @@ public class MisNotificaciones extends AppCompatActivity {
     private Button button1, button2;
     private Spinner spinner;
     private TextView textErrMess;
-    private final Context context = new Context();
     private ArrayList<Integer> listIdsNotifs;
 
     @Override
